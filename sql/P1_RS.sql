@@ -47,7 +47,7 @@ create table if not exists rail_lines(
     curr_station_id varchar(5) not null,
     prev_station_id varchar(5),
     next_station_id varchar(5),
-    speed_limit int not null check (assets > 0),
+    speed_limit int not null check (speed_limit > 0),
     constraint pk_rail_lines primary key (rail_id)
 );
 
@@ -76,8 +76,8 @@ and a train can has no schedule -> not in use
 */
 create table if not exists trains(
     train_id varchar(5) not null,
-    top_speed int not null check (asset > 0),
-    seats_num int not null check (asset > 0),
+    top_speed int not null check (top_speed > 0),
+    seats_num int not null check (seats_num > 0),
     price_mile int,
     number_of_schedule int,
     constraint pk_trains primary key (train_id)
