@@ -48,7 +48,7 @@ create table if not exists rail_lines(
     prev_station_id varchar(5),
     next_station_id varchar(5),
     speed_limit int not null check (speed_limit > 0),
-    constraint pk_rail_lines primary key (rail_id)
+    constraint pk_rail_lines primary key (rail_id, curr_station_id)
 );
 
 /*
@@ -64,7 +64,7 @@ create table if not exists routes(
     route_id varchar(20) not null,
     pass_stations varchar(5) not null,
     station_status int not null,
-    constraint pk_routes primary key (route_id)
+    constraint pk_routes primary key (route_id, pass_stations)
 );
 
 /*
