@@ -1,3 +1,8 @@
+--This is to drop all tables in this schema
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
 /*
 Table for station's basic info
 id, name and operation hrs
