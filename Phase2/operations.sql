@@ -94,10 +94,9 @@ create or replace function lowest_price() returns table(route_id varchar(5)) as
   $$language plpgsql;
 
 --This is to add reservation
-create or replace procedure add_resv(passanger_id int, route varchar(5), day_of_week varchar(10)) as
+create or replace procedure add_resv(new_passanger_id int, route varchar(5), new_day varchar(10)) as
   $$
-  begin
-    insert into reservations(passanger_id, route_id, day_of_week) values (passanger_id, route, day_of_week);
+    insert into reservations(passanger_id, route_id, day_of_week) values (new_passanger_id, route, new_day);
   end;
   $$language plpgsql;
 
@@ -105,6 +104,6 @@ create or replace procedure add_resv(passanger_id int, route varchar(5), day_of_
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
   $$
   begin
-    
+
   end;
   $$language plpgsql;
