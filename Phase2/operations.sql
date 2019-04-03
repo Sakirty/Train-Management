@@ -2,12 +2,13 @@
 drop procedure if exists insertpass(pass_id integer, first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
 
 CREATE PROCEDURE InsertPass(pass_id int,first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10))
-LANGUAGE SQL
-AS $BODY$
+LANGUAGE SQL AS
+$BODY$
     select MAX(passanger_id)+1 into pass_id from passangers;
     INSERT INTO passangers(passanger_id, f_name, l_name, street, town, zip)
     VALUES(pass_id, first_name, last_name, street1, town1, zip1);
 $BODY$;
+
 --this is for customer update
 drop function if exists edit_pass() cascade;
 drop trigger if exists check_pass on passangers;
@@ -30,29 +31,25 @@ create trigger check_pass
   on passangers
   for each row
   execute procedure edit_pass();
+
 --single route trip search
-create or replace function single_search() returns setof record as
+create or replace function single_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_id varchar(5)) as
   $$
   BEGIN
-  SELECT * into days_table from train_schedule where day_of_week = new.days_of_week;
-  select * into days_table1 from routes_and_station_status where route_id = days_table.route_id;
-  delete from days_table1 where station_status = false;
-  select * into arri_table from days_table1 where station_id = ARRIVAL_STATION;
-  select * into dest_table from days_table1 where station_id = DEST_STATION;
-  select route_id from (arri_table join dest_table where arri_table.route_id = dest_table.route_id);
-  return new;
+  create temp table selected_route as (select * from routes_and_station_status where route_id = (select train_schedule.route_id from train_schedule where day_of_week = want_days));
+  delete from selected_route where station_status = false;
+  create temp table arri_table as (select route_id from selected_route where station_id = a_station);
+  create temp table dest_table as (select route_id from selected_route where station_id = d_station);
+  return query
+    select route_id from (arri_table inner join dest_table on arri_table.route_id = dest_table.route_id);
   end;
   $$language plpgsql;
 
 --combination search
-create or replace function combine_search() returns setof record as
+create or replace function combine_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_1 varchar(5), route_2 varchar(5)) as
   $$
   BEGIN
-  SELECT * into days_table from train_schedule where day_of_week = new.days_of_week;
-  select * into days_table1 from routes_and_station_status where route_id = days_table.route_id;
-  delete from days_table1 where station_status = false;
-  select * into arri_table from days_table1 where station_id = ARRIVAL_STATION;
-  select * into dest_table from days_table1 where station_id = DEST_STATION;
+
   select * into combine_table from (arri_table join dest_table where arri_table.route_id <> dest_table.route_id);
   delete from combine_table where station_id = ARRIVAL or station_id = DESTINATION;
   --select where arritable.stationid = desttable.stationid
@@ -62,13 +59,52 @@ create or replace function combine_search() returns setof record as
   $$language plpgsql;
 
 --This is to show trains with available seats
-create or replace function available_seats() returns setof record as
+create or replace function available_seats() returns table(train_id varchar(5)) as
   $$
   BEGIN
-  execute 'create or replace temp view open_train as ' ||
-          'select train_id into open_train from seats where open_status = true;';
-  RETURN QUERY
-  SELECT * FROM open_trians;
-  --return new;
+  return query
+    select train_id from seats where open_status = true;
+  end;
+  $$language plpgsql;
+
+--this is to create the table with stops ascend
+create or replace function few_stops() returns table(route_id varchar(5), stop_num int) as
+  $$
+  BEGIN
+  return query
+    select route_id, stop_num from routes order by stop_num asc;
+  end;
+  $$language plpgsql;
+
+--this is to order the table run through most stations dec
+create or replace function pass_most() returns table(route_id varchar(5), total_num int) as
+  $$
+  begin
+    return query
+      select route_id, total_num from routes order by total_num desc;
+  end;
+  $$language plpgsql;
+
+--this is to calculate the lowest price
+create or replace function lowest_price() returns table(route_id varchar(5)) as
+  $$
+  begin
+
+  end;
+  $$language plpgsql;
+
+--This is to add reservation
+create or replace procedure add_resv(passanger_id int, route varchar(5), day_of_week varchar(10)) as
+  $$
+  begin
+    insert into reservations(passanger_id, route_id, day_of_week) values (passanger_id, route, day_of_week);
+  end;
+  $$language plpgsql;
+
+--this is for 1.3.1
+create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
+  $$
+  begin
+    
   end;
   $$language plpgsql;

@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="70" column="88" selection-start-line="70" selection-start-column="80" selection-end-line="70" selection-end-column="88" />
+            <state relative-caret-position="803">
+              <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -67,8 +67,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../operations.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
+            <state relative-caret-position="532">
+              <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="107" selection-end-column="4" />
+              <folding>
+                <element signature="n#check_pass#0" />
+                <element signature="e#2054#2814#0" />
+                <element signature="e#2708#2812#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -83,7 +88,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-318" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
@@ -114,12 +120,12 @@
     </option>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Database" order="0" visible="true" weight="0.1695279" />
+      <window_info content_ui="combo" id="Database" order="0" visible="true" weight="0.1695279" />
       <window_info id="Favorites" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" visible="true" weight="0.20127389" />
+      <window_info active="true" anchor="bottom" id="Database Console" visible="true" weight="0.20127389" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -141,20 +147,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rail_lines.sql">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/passangers">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/rail_distances">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/passangers.sql">
       <provider selected="true" editor-type-id="text-editor" />
@@ -201,14 +193,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="70" column="88" selection-start-line="70" selection-start-column="80" selection-end-line="70" selection-end-column="88" />
+    <entry file="dbSrc:///213ba9f6/e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/routine/insertpass@(integer,varchar,varchar,varchar,varchar,varchar).sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/passangers">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/trains">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/stations">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/seats">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
@@ -229,17 +238,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/seats">
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/rail_lines">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
         </state>
       </provider>
     </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/rail_distances">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="803">
+          <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../operations.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
+        <state relative-caret-position="532">
+          <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="107" selection-end-column="4" />
+          <folding>
+            <element signature="n#check_pass#0" />
+            <element signature="e#2054#2814#0" />
+            <element signature="e#2708#2812#0" />
+          </folding>
         </state>
       </provider>
     </entry>
