@@ -67,13 +67,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../operations.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="97" column="4" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="4" />
+            <state relative-caret-position="547">
+              <caret line="113" column="2" selection-start-line="113" selection-start-column="2" selection-end-line="113" selection-end-column="2" />
               <folding>
                 <element signature="n#check_pass#0" />
                 <element signature="e#2054#2814#0" />
                 <element signature="e#2708#2812#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -123,9 +132,9 @@
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Database" order="0" visible="true" weight="0.1695279" />
+      <window_info active="true" content_ui="combo" id="Database" order="0" visible="true" weight="0.1695279" />
       <window_info id="Favorites" order="1" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Database Console" visible="true" weight="0.20127389" />
+      <window_info anchor="bottom" id="Database Console" visible="true" weight="0.20127389" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -224,13 +233,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes_and_station_status">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -252,13 +254,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="803">
@@ -266,10 +261,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../operations.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="97" column="4" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="4" />
+        <state relative-caret-position="547">
+          <caret line="113" column="2" selection-start-line="113" selection-start-column="2" selection-end-line="113" selection-end-column="2" />
           <folding>
             <element signature="n#check_pass#0" />
             <element signature="e#2054#2814#0" />

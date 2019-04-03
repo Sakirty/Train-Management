@@ -104,6 +104,11 @@ create or replace procedure add_resv(new_passanger_id int, route varchar(5), new
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
   $$
   begin
-
+  create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
+  create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
+  return query
+    select train_id from temp_schedule where route_id = temp_stations.route_id;
   end;
   $$language plpgsql;
+
+--
