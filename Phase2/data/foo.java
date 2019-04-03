@@ -15,7 +15,12 @@ public class foo{
             String r2=r1.replace(" Stations: ",";");
             String r3=r2.replace(" Stops: ",";");
             String[] parts = r3.split(";"); 
-            allinput[allindex]=parts[0];
+            String[] stopsnum = parts[1].split(",");
+            String[] stopsAt = parts[2].split(",");
+            int stopAtCount = stopsAt.length;
+            int stops = stopsnum.length;
+            double stopRate = (double)stopAtCount/(double)stops * 100;
+            allinput[allindex]=parts[0]+";"+stops+";"+stopAtCount+";"+stopRate;
             allindex++;
         }
         sc.close();

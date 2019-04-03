@@ -45,6 +45,9 @@ This table contains only route id
 */
 create table if not exists routes(
     route_id varchar(20) not null,
+    total_num int,
+    stop_num int,
+    stop_rate float,
     constraint pk_routes primary key (route_id)
 );
 
