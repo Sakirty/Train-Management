@@ -17,33 +17,50 @@ create table if not exists stations
 
 
 /*
-a rail will be given a rail id
-and all stations on that rail will be reference to that id, we have prev/curr/next station
-identified by their ststion id (can be later join with stations_connection for distance calculation)
-speed limit should be positive
+This table will only contains the RAIL LINE ID and the speed limit
 */
 create table if not exists rail_lines(
     rail_id varchar(5) not null,
     speed_limit int not null check (speed_limit > 0),
-    station_list varchar(255),
-    distance_list varchar(255),
     constraint pk_rail_lines primary key (rail_id)
 );
 
 /*
+This table only contains the railline ID and the speed limit
+*/
+create table if not exists rail_distances(
+  rail_id     varchar(5) not null,
+  station_prev varchar(5),
+  station_next varchar(5),
+  station_distances int,
+  constraint pk_rail_distances primary key (rail_id,station_prev,station_next),
+  constraint fk_rail_distances_1 foreign key (rail_id) references rail_lines (rail_id),
+  constraint fk_rail_distances_2 foreign key (station_prev) references stations (station_id),
+  constraint fk_rail_distances_3 foreign key (station_next) references stations (station_id)
+);
+
+/*
 The route id indicates a unique route
-pass_stations indicates all stations on this route
-if station_status:
-    0 for start location
-    1 for will stop at
-    2 for will not stop, only pass by
-    3 for end station
+This table contains only route id
 */
 create table if not exists routes(
     route_id varchar(20) not null,
-    station_lists varchar(1000),
-    stop_list varchar(1000),
     constraint pk_routes primary key (route_id)
+);
+
+/*
+This table contains:
+route id, station id, station number, stop status
+as a foreign ref to routes and stations
+*/
+create table if not exists routes_and_station_status(
+  route_id       varchar(20) not null,
+  station_id     varchar(5)  not null,
+  station_num    int,
+  station_status boolean,
+  constraint pk_routes_and_station_status primary key (route_id, station_id),
+  constraint fk_routes_and_station_status_1 foreign key (route_id) references routes (route_id),
+  constraint fk_routes_and_station_status_2 foreign key (station_id) references stations (station_id)
 );
 
 /*
@@ -80,19 +97,7 @@ create table if not exists train_schedule(
     constraint fk_train_schedule_2 foreign key (train_id) references trains (train_id)
 );
 
-/*
-This is the agent for serving passangers
-1 agent can serve multi-passangers
-其实没有agent
-*/
-create table if not exists agents(
-    agent_id varchar(10) not null,
-    f_name varchar(20),
-    l_name varchar(20),
-    email_addr varchar(20),
-    phone_number varchar(20),
-    constraint pk_agent primary key (agent_id)
-);
+
 
 /*
 each passanger has a unique id
