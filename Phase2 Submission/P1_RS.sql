@@ -81,6 +81,18 @@ create table if not exists trains(
 );
 
 /*
+This table is used for seat reservations
+*/
+create table if not exists seats(
+  train_id varchar(5) not null,
+  seats_total int,
+  seats_taken int,
+  open_status boolean,
+  constraint pk_seats primary key (train_id),
+  constraint fk_seats_1 foreign key (train_id) references trains (train_id)
+);
+
+/*
 Table for train_schedule
 each schedule has a unique id
 the train/route running on this schedule
@@ -112,3 +124,4 @@ create table if not exists passangers(
     zip varchar(10),
     constraint pk_passangers primary key (passanger_id)
 );
+
