@@ -109,8 +109,8 @@ also arrival/depart time for each location
 */
 create table if not exists train_schedule(
     route_id varchar(5) not null,
-    day_of_week varchar(5),
-    time_route varchar(5),
+    day_of_week varchar(10),
+    time_route varchar(10),
     train_id varchar(10),
     constraint pk_train_schedule primary key (route_id, train_id),
     constraint fk_train_schedule_1 foreign key (route_id) references routes (route_id),
@@ -124,7 +124,7 @@ each passanger has a unique id
 and a related agent to get them ticket
 */
 create table if not exists passangers(
-    passanger_id varchar(10) not null,
+    passanger_id int not null,
     f_name varchar(20),
     l_name varchar(20),
     street varchar(20),
