@@ -119,6 +119,9 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
   end;
   $$language plpgsql;
 
+--this is for 1.3.3
+  
+
 --this is for 1.3.4
 
 --this is for 1.3.5
@@ -140,3 +143,81 @@ create or replace function pass_rate(percentage float) returns table(p_route var
     select route_id from routes where stop_rate >= percentage group by route_id;
   end;
   $$language plpgsql;
+
+--this is 1.3.7
+create or replace function display_route(want_route varchar(5)) returns table(day_get varchar(10), time_get varchar(10), train_get varchar(10)) as
+  $$
+  begin
+    return query
+      select day_of_week, time_route, train_id from train_schedule where route_id = want_route;
+  end;
+  $$language plpgsql;
+--this is 1.3.8
+
+--some triggers
+create or replace function incr_seat() returns trigger as
+  $$
+  declare
+    taken integer;
+		limt integer;
+  begin
+		select seats_taken into taken from seats where train_id = new.train_id;
+		select seats_total into limt from seats where train_id = new.train_id;
+		if taken < limt then
+			update seats set seats_taken = taken + 1 where train_id = new.train_id;
+			if seats_taken = limt - 1 then
+				update seats set open_status = False where train_id = new.train_id;
+			end if;
+		end if;
+		return new;
+  end;
+  $$ language plpgsql;
+
+create trigger incr_trigger
+  after insert
+  on seats
+  for each row
+  execute procedure incr_seat();
+
+create or replace function desc_seat() returns trigger as
+  $$
+  declare
+    taken integer;
+		limt integer;
+  begin
+		select seats_taken into taken from seats where train_id = new.train_id;
+		select seats_total into limt from seats where train_id = new.train_id;
+		if taken < limt then
+			update seats set seats_taken = taken - 1 where train_id = new.train_id;
+			if seats_taken < limt then
+				update seats set open_status = true where train_id = new.train_id;
+			end if;
+		end if;
+		return new;
+  end;
+  $$ language plpgsql;
+
+create trigger desc_trigger
+  after delete or update
+  on seats
+  for each row
+  execute procedure desc_seat();
+
+create or replace function no_add() returns trigger as
+  $$
+  declare
+    open_1 boolean;
+  begin
+		select open_status into open_1 from seats where train_id = new.train_id;
+		if open_1 = FALSE then
+   		RAISE EXCEPTION 'CANNOT INSERT, NOT OPEN';
+		end if;
+		return new;
+	end;
+  $$language plpgsql;
+
+create trigger rej_add
+  before insert
+  on seats
+  for each row
+  execute procedure no_add();
