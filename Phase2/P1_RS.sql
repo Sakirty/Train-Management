@@ -29,6 +29,16 @@ create table if not exists rail_lines(
     speed_limit int not null check (speed_limit > 0),
     constraint pk_rail_lines primary key (rail_id)
 );
+/*
+This is the table for the lists of stations on each rails
+*/
+create table if not exists rail_stations(
+  rail_id varchar(5) not null,
+  station_id varchar(5) not null,
+  constraint pk_rail_stations primary key (rail_id,station_id),
+  foreign key (rail_id) references rail_lines(rail_id),
+  foreign key (station_id) references stations(station_id)
+);
 
 /*
 This table only contains the railline ID and the speed limit

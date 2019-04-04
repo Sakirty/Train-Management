@@ -255,4 +255,11 @@ create or replace function get_seq(routeid varchar(10),arri_id varchar(10), dest
     end if;
   end;
   $$language plpgsql;
+--2.3 delete the database
+create or replace procedure delete_databse() as
+  $$
+  begin
+    drop database if exists postgres;
+  end;
+  $$language plpgsql;
 
