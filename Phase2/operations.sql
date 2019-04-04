@@ -1,4 +1,4 @@
---this is for customer add
+--1.1this is for customer add
 drop procedure if exists insertpass(pass_id integer, first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
 
 CREATE PROCEDURE InsertPass(pass_id int,first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10))
@@ -11,7 +11,7 @@ $$
   end;
 $$language plpgsql;
 
---this is for customer update
+--1.1this is for customer update
 drop function if exists edit_pass() cascade;
 drop trigger if exists check_pass on passangers;
 
@@ -34,7 +34,7 @@ create trigger check_pass
   for each row
   execute procedure edit_pass();
 
---single route trip search
+--1.2.1single route trip search
 create or replace function single_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_id varchar(5)) as
   $$
   BEGIN
@@ -47,16 +47,18 @@ create or replace function single_search(want_days varchar(10), a_station varcha
   end;
   $$language plpgsql;
 
---combination search
-create or replace function combine_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_1 varchar(5), route_2 varchar(5)) as
+--1.2.2combination search
+create or replace function combine_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_1 varchar(5), route_2 varchar(5), change_station varchar(10)) as
   $$
   BEGIN
-
-  select * into combine_table from (arri_table join dest_table where arri_table.route_id <> dest_table.route_id);
-  delete from combine_table where station_id = ARRIVAL or station_id = DESTINATION;
-  --select where arritable.stationid = desttable.stationid
-  --return arritable.rid, desttable.rid, stationid
-  return new;
+  create temp table select_day as (select * from routes_and_station_status where route_id = (select train_schedule.route_id from train_schedule where day_of_week = want_days));
+  delete from select_day where station_status = false;
+  create temp table arri_table as (select route_id from select_day where station_id = a_station);
+  create temp table dest_table as (select route_id from select_day where station_id = d_station);
+  create temp table arr_des_table as (select arri_table.route_id as ar_id, dest_table.route_id as de_id, arri_table.station_id as a_sta, dest_table.station_id as d_sta from (arri_table inner join dest_table on arri_table.route_id <> dest_table.route_id));
+  delete from arr_des_table where (a_sta = a_station) or (d_sta = d_station) or (a_sta = d_station) or (d_sta = a_station);
+  return query
+    select ar_id, de_id, a_sta from arr_des_table where a_sta = d_sta;
   end;
   $$language plpgsql;
 
@@ -95,7 +97,7 @@ create or replace function lowest_price() returns table(route_id varchar(5)) as
   end;
   $$language plpgsql;
 
---This is to add reservation
+--1.2.5This is to add reservation
 create or replace procedure add_resv(new_passanger_id int, route varchar(10), new_day varchar(10)) as
   $$
     insert into reservations(passanger_id, route_id, day_of_week) values (new_passanger_id, route, new_day);
