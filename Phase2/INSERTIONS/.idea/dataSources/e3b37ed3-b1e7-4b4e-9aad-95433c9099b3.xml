@@ -9,7 +9,7 @@
       <Comment>default administrative connection database</Comment>
       <StateNumber>567</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18331</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18353</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </database>
@@ -95,7 +95,7 @@
       <ObjectId>17313</ObjectId>
       <StateNumber>8007</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18332</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18354</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -219,9 +219,9 @@
       <StateNumber>8040</StateNumber>
     </table>
     <table id="37" parent="17" name="z">
-      <ObjectId>17593</ObjectId>
+      <ObjectId>17602</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>18330</StateNumber>
+      <StateNumber>18352</StateNumber>
     </table>
     <column id="38" parent="26" name="passanger_id">
       <Position>1</Position>
@@ -825,19 +825,13 @@ train_id</ColNames>
     <column id="122" parent="37" name="route_id">
       <Position>1</Position>
       <DataType>varchar(20)|0s</DataType>
-      <StateNumber>18330</StateNumber>
+      <StateNumber>18352</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="123" parent="37" name="rail_id">
       <Position>2</Position>
       <DataType>varchar(5)|0s</DataType>
-      <StateNumber>18330</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="124" parent="37" name="station_id">
-      <Position>3</Position>
-      <DataType>varchar(5)|0s</DataType>
-      <StateNumber>18330</StateNumber>
+      <StateNumber>18352</StateNumber>
       <TypeId>1043</TypeId>
     </column>
   </database-model>
