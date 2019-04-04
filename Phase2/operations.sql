@@ -2,12 +2,14 @@
 drop procedure if exists insertpass(pass_id integer, first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
 
 CREATE PROCEDURE InsertPass(pass_id int,first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10))
-LANGUAGE SQL AS
-$BODY$
+AS
+$$
+  begin
     select MAX(passanger_id)+1 into pass_id from passangers;
     INSERT INTO passangers(passanger_id, f_name, l_name, street, town, zip)
     VALUES(pass_id, first_name, last_name, street1, town1, zip1);
-$BODY$;
+  end;
+$$language plpgsql;
 
 --this is for customer update
 drop function if exists edit_pass() cascade;
@@ -120,7 +122,7 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
   $$language plpgsql;
 
 --this is for 1.3.3
-  
+
 
 --this is for 1.3.4
 
