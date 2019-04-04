@@ -58,8 +58,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="803">
+            <state relative-caret-position="2100">
               <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../tests.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -67,22 +76,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../operations.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="113" column="2" selection-start-line="113" selection-start-column="2" selection-end-line="113" selection-end-column="2" />
+            <state relative-caret-position="160">
+              <caret line="121" column="19" selection-start-line="121" selection-start-column="19" selection-end-line="121" selection-end-column="19" />
               <folding>
                 <element signature="n#check_pass#0" />
                 <element signature="e#2054#2814#0" />
                 <element signature="e#2708#2812#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/train_schedule">
-          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-            <state>
-              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -93,6 +93,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/../P1_RS.sql" />
+        <option value="$PROJECT_DIR$/../tests.sql" />
         <option value="$PROJECT_DIR$/../operations.sql" />
       </list>
     </option>
@@ -134,7 +135,7 @@
     <layout>
       <window_info active="true" content_ui="combo" id="Database" order="0" visible="true" weight="0.1695279" />
       <window_info id="Favorites" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" visible="true" weight="0.20127389" />
+      <window_info anchor="bottom" id="Database Console" visible="true" weight="0.41910827" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -233,14 +234,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes_and_station_status">
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/rail_lines">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/rail_lines">
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
@@ -256,15 +257,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../P1_RS.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="803">
+        <state relative-caret-position="2100">
           <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes">
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/routes_and_station_status">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/ne">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+          <column-attributes>
+            <column name="ctid" enabled="false" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/temp1">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+          <column-attributes>
+            <column name="ctid" enabled="false" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e3b37ed3-b1e7-4b4e-9aad-95433c9099b3/database/postgres/schema/public/table/temp2">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+          <column-attributes>
+            <column name="ctid" enabled="false" />
+          </column-attributes>
         </state>
       </provider>
     </entry>
@@ -275,10 +306,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../tests.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../operations.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="113" column="2" selection-start-line="113" selection-start-column="2" selection-end-line="113" selection-end-column="2" />
+        <state relative-caret-position="160">
+          <caret line="121" column="19" selection-start-line="121" selection-start-column="19" selection-end-line="121" selection-end-column="19" />
           <folding>
             <element signature="n#check_pass#0" />
             <element signature="e#2054#2814#0" />

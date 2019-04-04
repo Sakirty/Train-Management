@@ -9,7 +9,7 @@
       <Comment>default administrative connection database</Comment>
       <StateNumber>567</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18028</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18104</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </database>
@@ -95,7 +95,7 @@
       <ObjectId>17313</ObjectId>
       <StateNumber>8007</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18029</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18105</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>

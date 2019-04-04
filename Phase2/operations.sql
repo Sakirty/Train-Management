@@ -41,7 +41,7 @@ create or replace function single_search(want_days varchar(10), a_station varcha
   create temp table arri_table as (select route_id from selected_route where station_id = a_station);
   create temp table dest_table as (select route_id from selected_route where station_id = d_station);
   return query
-    select route_id from (arri_table inner join dest_table on arri_table.route_id = dest_table.route_id);
+    select route_id from (arri_table inner join dest_table on arri_table.route_id = dest_table.route_id) group by route_id;
   end;
   $$language plpgsql;
 
@@ -94,7 +94,7 @@ create or replace function lowest_price() returns table(route_id varchar(5)) as
   $$language plpgsql;
 
 --This is to add reservation
-create or replace procedure add_resv(new_passanger_id int, route varchar(5), new_day varchar(10)) as
+create or replace procedure add_resv(new_passanger_id int, route varchar(10), new_day varchar(10)) as
   $$
     insert into reservations(passanger_id, route_id, day_of_week) values (new_passanger_id, route, new_day);
   end;
@@ -107,8 +107,36 @@ create or replace function all_pass(want_station varchar(5), want_day varchar(10
   create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
   create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
   return query
-    select train_id from temp_schedule where route_id = temp_stations.route_id;
+    select train_id from temp_schedule where route_id = temp_stations.route_id group by train_id;
   end;
   $$language plpgsql;
 
---
+--this is for 1.3.2
+create or replace function pass_multi() returns table(multi_route varchar(5)) as
+  $$
+  begin
+
+  end;
+  $$language plpgsql;
+
+--this is for 1.3.4
+
+--this is for 1.3.5
+create or replace function never_pass(want_staton varchar(5)) returns table(np_train varchar(5)) as
+  $$
+  begin
+  --select route_id from routes_and_station_status where station_status = false and station_id = want_staton;
+  return query
+    select train_id from train_schedule where route_id = (select route_id from routes_and_station_status where station_status = false and station_id = want_staton) group by train_id;
+
+  end;
+  $$language plpgsql;
+
+--this is for 1.3.6
+create or replace function pass_rate(percentage float) returns table(p_route varchar(10)) as
+  $$
+  begin
+  return query
+    select route_id from routes where stop_rate >= percentage group by route_id;
+  end;
+  $$language plpgsql;
