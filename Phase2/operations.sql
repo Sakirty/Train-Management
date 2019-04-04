@@ -71,16 +71,16 @@ create or replace function available_seats() returns table(train_id varchar(5)) 
   end;
   $$language plpgsql;
 
---this is to create the table with stops ascend
+--1.2.4.1this is to create the table with stops ascend
 create or replace function few_stops() returns table(route_id varchar(5), stop_num int) as
   $$
   BEGIN
   return query
-    select route_id, stop_num from routes order by stop_num asc;
+    select route_id, stop_num from routes group by route_id order by stop_num asc;
   end;
   $$language plpgsql;
 
---this is to order the table run through most stations dec
+--1.2.4.2this is to order the table run through most stations dec
 create or replace function pass_most() returns table(route_id varchar(5), total_num int) as
   $$
   begin
@@ -225,3 +225,34 @@ create trigger rej_add
   on seats
   for each row
   execute procedure no_add();
+
+--get seq of stations for searches
+--helper for 1.2.4.3~1.2.4.8
+--1 ->3
+--curr last
+--1 2
+--2 3
+create or replace function get_seq(routeid varchar(10),arri_id varchar(10), dest_id varchar(10)) returns table(curst varchar(10),targst varchar(10))as
+  $$
+  declare
+    max1 varchar(10);
+    max2 varchar(10);
+  begin
+    create temp table temp_table as (select station_id, station_num from routes_and_station_status where route_id = routeid);
+    create temp table temp_table2 as  (select station_id, station_num from temp_table where (station_num between (select station_num from temp_table where station_id = arri_id) and (select station_num from temp_table where station_id = dest_id)));
+    create temp table t1 as (select * from temp_table2);
+    create temp table t2 as (select * from temp_table2);
+    delete from t1 where station_id = arri_id;
+    delete from t2 where station_id = dest_id;
+    select max(station_num) into max1 from t1;
+    select max(station_num) into max2 from t2;
+    if max1 > max2 then
+      return query
+        select t1.station_id, t2.station_id from (t1 join t2 on t1.station_num = t2.station_num + 1);
+    else
+      return query
+        select t1.station_id, t2.station_id from (t1 join t2 on t1.station_num = t2.station_num - 1);
+    end if;
+  end;
+  $$language plpgsql;
+
