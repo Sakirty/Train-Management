@@ -150,7 +150,12 @@ create or replace function all_pass(want_station varchar(5), want_day varchar(10
 create or replace function pass_multi() returns table(multi_route varchar(5)) as
   $$
   begin
-
+    create temp table t1 as (select distinct route_id, rail_id from routes_and_station_status left join rail_stations
+  on routes_and_station_status.station_id = rail_stations.station_id);
+    create temp table t2 as (select route_id, count(route_id) from t1 group by route_id);
+    delete from t2 where count = 1;
+    return query
+      select route_id from t2;
   end;
   $$language plpgsql;
 
