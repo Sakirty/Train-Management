@@ -20,4 +20,5 @@ select station_id, count(station_id) into z2 from z1 group by station_id;
 delete from z2 where count < (select count(route_id) from z1);
 
 --
-select route_id, rail_id into z from routes_and_station_status left join rail_stations on routes_and_station_status.station_id = rail_stations.station_id;
+select distinct route_id, rail_id into z from routes_and_station_status left join rail_stations
+  on routes_and_station_status.station_id = rail_stations.station_id;
