@@ -147,6 +147,8 @@ create table if not exists reservations(
   passanger_id int not null,
   route_id varchar(5),
   day_of_week varchar(10),
+  start_sta varchar(10),
+  end_sta varchar(10),
   constraint pk_reservations primary key (passanger_id,route_id,day_of_week),
   foreign key (passanger_id) references passangers(passanger_id),
   foreign key (route_id) references routes(route_id)

@@ -9,7 +9,7 @@
       <Comment>default administrative connection database</Comment>
       <StateNumber>567</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18480</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18529</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </database>
@@ -95,7 +95,7 @@
       <ObjectId>17313</ObjectId>
       <StateNumber>8007</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18481</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18530</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -184,9 +184,9 @@
       <StateNumber>18261</StateNumber>
     </table>
     <table id="30" parent="17" name="reservations">
-      <ObjectId>17468</ObjectId>
+      <ObjectId>17654</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>18009</StateNumber>
+      <StateNumber>18492</StateNumber>
     </table>
     <table id="31" parent="17" name="routes">
       <ObjectId>17356</ObjectId>
@@ -218,94 +218,84 @@
       <Owner>postgres</Owner>
       <StateNumber>8040</StateNumber>
     </table>
-    <table id="37" parent="17" name="z1">
-      <ObjectId>17645</ObjectId>
-      <Owner>postgres</Owner>
-      <StateNumber>18454</StateNumber>
-    </table>
-    <table id="38" parent="17" name="z2">
-      <ObjectId>17648</ObjectId>
-      <Owner>postgres</Owner>
-      <StateNumber>18455</StateNumber>
-    </table>
-    <column id="39" parent="26" name="passanger_id">
+    <column id="37" parent="26" name="passanger_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8010</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="40" parent="26" name="f_name">
+    <column id="38" parent="26" name="f_name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <StateNumber>8010</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="41" parent="26" name="l_name">
+    <column id="39" parent="26" name="l_name">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
       <StateNumber>8010</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="42" parent="26" name="street">
+    <column id="40" parent="26" name="street">
       <Position>4</Position>
       <DataType>varchar(20)|0s</DataType>
       <StateNumber>8010</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="43" parent="26" name="town">
+    <column id="41" parent="26" name="town">
       <Position>5</Position>
       <DataType>varchar(20)|0s</DataType>
       <StateNumber>8010</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="44" parent="26" name="zip">
+    <column id="42" parent="26" name="zip">
       <Position>6</Position>
       <DataType>varchar(10)|0s</DataType>
       <StateNumber>8010</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="45" parent="26" name="pk_passangers">
+    <index id="43" parent="26" name="pk_passangers">
       <ObjectId>17317</ObjectId>
       <StateNumber>8010</StateNumber>
       <ColNames>passanger_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="46" parent="26" name="pk_passangers">
+    <key id="44" parent="26" name="pk_passangers">
       <ObjectId>17318</ObjectId>
       <StateNumber>8010</StateNumber>
       <ColNames>passanger_id</ColNames>
       <UnderlyingIndexName>pk_passangers</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <column id="47" parent="27" name="rail_id">
+    <column id="45" parent="27" name="rail_id">
       <Position>1</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8036</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="48" parent="27" name="station_prev">
+    <column id="46" parent="27" name="station_prev">
       <Position>2</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8036</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="49" parent="27" name="station_next">
+    <column id="47" parent="27" name="station_next">
       <Position>3</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8036</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="50" parent="27" name="station_distances">
+    <column id="48" parent="27" name="station_distances">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
       <StateNumber>8036</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="51" parent="27" name="pk_rail_distances">
+    <index id="49" parent="27" name="pk_rail_distances">
       <ObjectId>17339</ObjectId>
       <StateNumber>8036</StateNumber>
       <ColNames>rail_id
@@ -313,7 +303,7 @@ station_prev
 station_next</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="52" parent="27" name="pk_rail_distances">
+    <key id="50" parent="27" name="pk_rail_distances">
       <ObjectId>17340</ObjectId>
       <StateNumber>8036</StateNumber>
       <ColNames>rail_id
@@ -322,7 +312,7 @@ station_next</ColNames>
       <UnderlyingIndexName>pk_rail_distances</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="53" parent="27" name="fk_rail_distances_1">
+    <foreign-key id="51" parent="27" name="fk_rail_distances_1">
       <ObjectId>17341</ObjectId>
       <StateNumber>8036</StateNumber>
       <ColNames>rail_id</ColNames>
@@ -332,7 +322,7 @@ station_next</ColNames>
       <RefKeyName>pk_rail_lines</RefKeyName>
       <RefColNames>rail_id</RefColNames>
     </foreign-key>
-    <foreign-key id="54" parent="27" name="fk_rail_distances_2">
+    <foreign-key id="52" parent="27" name="fk_rail_distances_2">
       <ObjectId>17346</ObjectId>
       <StateNumber>8036</StateNumber>
       <ColNames>station_prev</ColNames>
@@ -342,7 +332,7 @@ station_next</ColNames>
       <RefKeyName>pk_stations</RefKeyName>
       <RefColNames>station_id</RefColNames>
     </foreign-key>
-    <foreign-key id="55" parent="27" name="fk_rail_distances_3">
+    <foreign-key id="53" parent="27" name="fk_rail_distances_3">
       <ObjectId>17351</ObjectId>
       <StateNumber>8036</StateNumber>
       <ColNames>station_next</ColNames>
@@ -352,61 +342,61 @@ station_next</ColNames>
       <RefKeyName>pk_stations</RefKeyName>
       <RefColNames>station_id</RefColNames>
     </foreign-key>
-    <column id="56" parent="28" name="rail_id">
+    <column id="54" parent="28" name="rail_id">
       <Position>1</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8035</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="57" parent="28" name="speed_limit">
+    <column id="55" parent="28" name="speed_limit">
       <Position>2</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>8035</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="58" parent="28" name="pk_rail_lines">
+    <index id="56" parent="28" name="pk_rail_lines">
       <ObjectId>17334</ObjectId>
       <StateNumber>8035</StateNumber>
       <ColNames>rail_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="59" parent="28" name="pk_rail_lines">
+    <key id="57" parent="28" name="pk_rail_lines">
       <ObjectId>17335</ObjectId>
       <StateNumber>8035</StateNumber>
       <ColNames>rail_id</ColNames>
       <UnderlyingIndexName>pk_rail_lines</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <check id="60" parent="28" name="rail_lines_speed_limit_check">
+    <check id="58" parent="28" name="rail_lines_speed_limit_check">
       <ObjectId>17333</ObjectId>
       <StateNumber>8035</StateNumber>
       <ColNames>speed_limit</ColNames>
       <Predicate>speed_limit &gt; 0</Predicate>
     </check>
-    <column id="61" parent="29" name="rail_id">
+    <column id="59" parent="29" name="rail_id">
       <Position>1</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>18261</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="62" parent="29" name="station_id">
+    <column id="60" parent="29" name="station_id">
       <Position>2</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>18261</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="63" parent="29" name="pk_rail_stations">
+    <index id="61" parent="29" name="pk_rail_stations">
       <ObjectId>17557</ObjectId>
       <StateNumber>18261</StateNumber>
       <ColNames>rail_id
 station_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="64" parent="29" name="pk_rail_stations">
+    <key id="62" parent="29" name="pk_rail_stations">
       <ObjectId>17558</ObjectId>
       <StateNumber>18261</StateNumber>
       <ColNames>rail_id
@@ -414,7 +404,7 @@ station_id</ColNames>
       <UnderlyingIndexName>pk_rail_stations</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="65" parent="29" name="rail_stations_rail_id_fkey">
+    <foreign-key id="63" parent="29" name="rail_stations_rail_id_fkey">
       <ObjectId>17559</ObjectId>
       <StateNumber>18261</StateNumber>
       <ColNames>rail_id</ColNames>
@@ -424,7 +414,7 @@ station_id</ColNames>
       <RefKeyName>pk_rail_lines</RefKeyName>
       <RefColNames>rail_id</RefColNames>
     </foreign-key>
-    <foreign-key id="66" parent="29" name="rail_stations_station_id_fkey">
+    <foreign-key id="64" parent="29" name="rail_stations_station_id_fkey">
       <ObjectId>17564</ObjectId>
       <StateNumber>18261</StateNumber>
       <ColNames>station_id</ColNames>
@@ -434,38 +424,50 @@ station_id</ColNames>
       <RefKeyName>pk_stations</RefKeyName>
       <RefColNames>station_id</RefColNames>
     </foreign-key>
-    <column id="67" parent="30" name="passanger_id">
+    <column id="65" parent="30" name="passanger_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>18009</StateNumber>
+      <StateNumber>18492</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="68" parent="30" name="route_id">
+    <column id="66" parent="30" name="route_id">
       <Position>2</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>18009</StateNumber>
+      <StateNumber>18492</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="69" parent="30" name="day_of_week">
+    <column id="67" parent="30" name="day_of_week">
       <Position>3</Position>
       <DataType>varchar(10)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>18009</StateNumber>
+      <StateNumber>18492</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="68" parent="30" name="start_sta">
+      <Position>4</Position>
+      <DataType>varchar(10)|0s</DataType>
+      <StateNumber>18492</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="69" parent="30" name="end_sta">
+      <Position>5</Position>
+      <DataType>varchar(10)|0s</DataType>
+      <StateNumber>18492</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <index id="70" parent="30" name="pk_reservations">
-      <ObjectId>17471</ObjectId>
-      <StateNumber>18009</StateNumber>
+      <ObjectId>17657</ObjectId>
+      <StateNumber>18492</StateNumber>
       <ColNames>passanger_id
 route_id
 day_of_week</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="71" parent="30" name="pk_reservations">
-      <ObjectId>17472</ObjectId>
-      <StateNumber>18009</StateNumber>
+      <ObjectId>17658</ObjectId>
+      <StateNumber>18492</StateNumber>
       <ColNames>passanger_id
 route_id
 day_of_week</ColNames>
@@ -473,8 +475,8 @@ day_of_week</ColNames>
       <Primary>1</Primary>
     </key>
     <foreign-key id="72" parent="30" name="reservations_passanger_id_fkey">
-      <ObjectId>17473</ObjectId>
-      <StateNumber>18009</StateNumber>
+      <ObjectId>17659</ObjectId>
+      <StateNumber>18492</StateNumber>
       <ColNames>passanger_id</ColNames>
       <RefTableId>17314</RefTableId>
       <RefColPositions>1</RefColPositions>
@@ -483,8 +485,8 @@ day_of_week</ColNames>
       <RefColNames>passanger_id</RefColNames>
     </foreign-key>
     <foreign-key id="73" parent="30" name="reservations_route_id_fkey">
-      <ObjectId>17478</ObjectId>
-      <StateNumber>18009</StateNumber>
+      <ObjectId>17664</ObjectId>
+      <StateNumber>18492</StateNumber>
       <ColNames>route_id</ColNames>
       <RefTableId>17356</RefTableId>
       <RefColPositions>1</RefColPositions>
@@ -827,29 +829,5 @@ train_id</ColNames>
       <ColNames>top_speed</ColNames>
       <Predicate>top_speed &gt; 0</Predicate>
     </check>
-    <column id="123" parent="37" name="route_id">
-      <Position>1</Position>
-      <DataType>varchar(20)|0s</DataType>
-      <StateNumber>18454</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="124" parent="37" name="station_id">
-      <Position>2</Position>
-      <DataType>varchar(5)|0s</DataType>
-      <StateNumber>18454</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="125" parent="38" name="route_id">
-      <Position>1</Position>
-      <DataType>varchar(20)|0s</DataType>
-      <StateNumber>18455</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="126" parent="38" name="station_id">
-      <Position>2</Position>
-      <DataType>varchar(5)|0s</DataType>
-      <StateNumber>18455</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
   </database-model>
 </dataSource>
