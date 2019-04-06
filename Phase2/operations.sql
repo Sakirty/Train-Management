@@ -163,6 +163,19 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
 
 
 --this is for 1.3.4
+create or replace function all_trian_pass_through() returns table(null_station varchar(10)) as
+  $$
+  begin
+    create temp table t1 as (select route_id from train_schedule group by route_id);
+    create temp table t2 as (select * from routes_and_station_status);
+    delete from t2 where route_id not in (select route_id from t1);
+    delete from t2 where station_status = true;
+    create temp table t3 as (select station_id, count(station_id) from t2 group by station_id);
+    delete from t3 where count < (select count(route_id) from t2);
+    return query
+      select station_id from t3;
+  end;
+  $$language plpgsql;
 
 --this is for 1.3.5
 create or replace function never_pass(want_staton varchar(5)) returns table(np_train varchar(5)) as

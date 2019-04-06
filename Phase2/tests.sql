@@ -27,3 +27,7 @@ select route_id, count(route_id) into z1 from z group by route_id;
 delete from z2 where count = 1;
 select count(route_id) from z2;
 
+--
+
+select route_id, station_id into z1 from routes_and_station_status;
+select route_id, station_id into z2 from routes_and_station_status;
