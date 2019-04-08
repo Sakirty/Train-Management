@@ -9,7 +9,7 @@
       <Comment>default administrative connection database</Comment>
       <StateNumber>567</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18641</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18651</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </database>
@@ -115,7 +115,7 @@
       <ObjectId>17313</ObjectId>
       <StateNumber>8007</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18642</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18652</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -241,8 +241,8 @@
     <routine id="41" parent="21" name="all_trian_pass_through">
       <ObjectId>17678</ObjectId>
       <Owner>postgres</Owner>
-      <SourceTextLength>546</SourceTextLength>
-      <StateNumber>18578</StateNumber>
+      <SourceTextLength>1065</SourceTextLength>
+      <StateNumber>18650</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ResultsDefinition>TABLE(null_station character varying)</ResultsDefinition>
       <LanguageName>plpgsql</LanguageName>

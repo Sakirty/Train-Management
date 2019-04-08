@@ -267,14 +267,14 @@ create or replace function all_trian_pass_through() returns table(null_station v
   $$
   begin
     drop table if exists t1, t2, t3;
-    create temp table t1 as (select route_id from train_schedule group by route_id);
-    create temp table t2 as (select * from routes_and_station_status);
-    delete from t2 where route_id not in (select route_id from t1);
-    delete from t2 where station_status = true;
-    create temp table t3 as (select station_id, count(station_id) from t2 group by station_id);
-    delete from t3 where count < (select count(route_id) from t2);
+    create temp table t1 as
+      (select train_schedule.route_id as rid1, train_schedule.train_id as tid1 from train_schedule);
+    create temp table t2 as
+      (select tid1, routes_and_station_status.station_id as sid1 from t1 join routes_and_station_status on rid1 = routes_and_station_status.route_id);
+    create temp table t3 as
+      (select sid1, count(distinct tid1) as cot from t2 group by sid1);
     return query
-      select station_id from t3;
+      select sid1 from t3 where cot = (select count(trains.train_id) from trains);
   end;
   $$language plpgsql;
 
