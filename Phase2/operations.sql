@@ -181,6 +181,7 @@ create or replace function lowest_distance(route varchar(5), start_st varchar(10
     mem2 varchar(10);
     dist int;
   begin
+    drop table if exists t1, t2;
     create temp table t1 as (select * from routes_and_station_status where route_id = route);
     select station_num into mem1 from t1 where station_id = start_st;
     select station_num into mem2 from t1 where station_id = end_st;
@@ -209,6 +210,7 @@ create or replace function resv_update() returns trigger as
     stats_seat boolean;
     seats_occu int;
   begin
+    drop table if exists t1;
     select new_day into want_day from reservations;
     select route into want_route from reservations;
     select open_status into stats_seat from seats;
@@ -235,6 +237,7 @@ create trigger do_update
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
   $$
   begin
+
   create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
   create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
   return query
@@ -284,14 +287,21 @@ create or replace function all_trian_pass_through() returns table(null_station v
 create or replace function never_pass(want_staton varchar(5)) returns table(np_train varchar(5)) as
   $$
   begin
-  --select route_id from routes_and_station_status where station_status = false and station_id = want_staton;
+  drop table if exists t1,t2,t3;
+  create temp table t1 as
+    (select * from routes_and_station_status where station_id = want_staton);
+  delete from t1 where station_status = false;
+  create temp table t2 as
+    (select t1.route_id from t1 group by route_id);
+  create temp table t3 as
+    (select * from train_schedule);
+  delete from t3 where t3.route_id not in (select t2.route_id from t2);
   return query
-    select train_id from train_schedule where route_id = (select route_id from routes_and_station_status where station_status = false and station_id = want_staton) group by train_id;
-
+    select distinct train_id from t3;
   end;
   $$language plpgsql;
 
---select * from never_pass('9');
+--select * from never_pass('1');
 
 --this is for 1.3.6
 create or replace function pass_rate(percentage float) returns table(p_route varchar(10)) as

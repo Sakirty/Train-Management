@@ -9,7 +9,7 @@
       <Comment>default administrative connection database</Comment>
       <StateNumber>567</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18651</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18692</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </database>
@@ -115,7 +115,7 @@
       <ObjectId>17313</ObjectId>
       <StateNumber>8007</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>18652</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18693</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -334,8 +334,8 @@
     <routine id="48" parent="21" name="never_pass">
       <ObjectId>17697</ObjectId>
       <Owner>postgres</Owner>
-      <SourceTextLength>327</SourceTextLength>
-      <StateNumber>18554</StateNumber>
+      <SourceTextLength>470</SourceTextLength>
+      <StateNumber>18691</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>want_staton character varying</ArgumentsDefinition>
       <ResultsDefinition>TABLE(np_train character varying)</ResultsDefinition>
