@@ -1,9 +1,12 @@
+--加DROP TEMP TABLE
 --1.1this is for customer add
-drop procedure if exists insertpass(pass_id integer, first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
+drop procedure if exists insertpass(first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
 
-CREATE PROCEDURE InsertPass(pass_id int,first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10))
+CREATE or replace PROCEDURE InsertPass(first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10))
 AS
 $$
+  declare
+  pass_id int;
   begin
     select MAX(passanger_id)+1 into pass_id from passangers;
     INSERT INTO passangers(passanger_id, f_name, l_name, street, town, zip)
@@ -11,7 +14,18 @@ $$
   end;
 $$language plpgsql;
 
---1.1this is for customer update
+create or replace function get_passanger(id int) returns table(pid int, fname varchar(10),lname varchar(10), str varchar(10), town varchar(10), zip varchar(10))
+as
+  $$
+  begin
+  return query
+    select * from passangers where passanger_id = id;
+  end;
+  $$language plpgsql;
+
+--select * from get_passanger(100706);
+
+--1.1 this is for customer update
 drop function if exists edit_pass() cascade;
 drop trigger if exists check_pass on passangers;
 
@@ -38,38 +52,74 @@ create trigger check_pass
 create or replace function single_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_id varchar(5)) as
   $$
   BEGIN
-  create temp table selected_route as (select * from routes_and_station_status where route_id = (select train_schedule.route_id from train_schedule where day_of_week = want_days));
-  delete from selected_route where station_status = false;
-  create temp table arri_table as (select route_id from selected_route where station_id = a_station);
-  create temp table dest_table as (select route_id from selected_route where station_id = d_station);
+  drop table if exists dt, rid_day, arri, dest;
+  create temp table dt as
+    (select train_schedule.route_id, train_schedule.time_route from train_schedule where day_of_week = want_days);
+  create temp table rid_day as
+    (select r.route_id, r.station_id, r.station_num, r.station_status,dt.time_route from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+  delete from rid_day where station_status = false;
+  create temp table arri as
+    (select rid_day.route_id, rid_day.time_route, rid_day.station_num as sorder1 from rid_day where station_id = a_station);
+  create temp table dest as
+    (select rid_day.route_id, rid_day.time_route, rid_day.station_num as sorder2 from rid_day where station_id = d_station);
+
   return query
-    select route_id from (arri_table inner join dest_table on arri_table.route_id = dest_table.route_id) group by route_id;
+    select arri.route_id from (arri inner join dest on (arri.route_id = dest.route_id and arri.time_route = dest.time_route) and arri.sorder1 < dest.sorder2);
   end;
   $$language plpgsql;
 
+--select * from single_search('Monday','1','8');
+
 --1.2.2combination search
-create or replace function combine_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_1 varchar(5), route_2 varchar(5), change_station varchar(10)) as
+create or replace function combine_search(want_days varchar(10), a_station varchar(5), d_station varchar(5)) returns table(route_1 varchar(5), route_2 varchar(5), trans_station varchar(5)) as
   $$
   BEGIN
-  create temp table select_day as (select * from routes_and_station_status where route_id = (select train_schedule.route_id from train_schedule where day_of_week = want_days));
-  delete from select_day where station_status = false;
-  create temp table arri_table as (select route_id from select_day where station_id = a_station);
-  create temp table dest_table as (select route_id from select_day where station_id = d_station);
-  create temp table arr_des_table as (select arri_table.route_id as ar_id, dest_table.route_id as de_id, arri_table.station_id as a_sta, dest_table.station_id as d_sta from (arri_table inner join dest_table on arri_table.route_id <> dest_table.route_id));
-  delete from arr_des_table where (a_sta = a_station) or (d_sta = d_station) or (a_sta = d_station) or (d_sta = a_station);
+  drop table if exists dt, rid_day,arri, arri_order, arri_routes, dest, dest_order, dest_routes, tablea, tableb, tablec, comb_table;
+  create temp table dt as
+    (select train_schedule.route_id, train_schedule.time_route from train_schedule where day_of_week = want_days);
+  create temp table rid_day as
+    (select r.route_id, r.station_id, r.station_num, r.station_status,dt.time_route from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+  delete from rid_day where station_status = false;
+  create temp table arri_routes as
+     (select rid_day.route_id, rid_day.time_route from rid_day where station_id = a_station);
+  create temp table arri as
+      (select rid_day.route_id, rid_day.station_id, rid_day.station_num as sorder1 from (rid_day inner join arri_routes on (rid_day.route_id = arri_routes.route_id and rid_day.time_route = arri_routes.time_route)));
+  create temp table arri_order as
+      (select arri.route_id, arri.sorder1 from arri where arri.station_id = a_station);
+  create temp table dest_routes as
+  (select rid_day.route_id,rid_day.time_route from rid_day where station_id = d_station);
+  create temp table dest as
+    (select rid_day.route_id, rid_day.station_id, rid_day.station_num as sorder2 from (rid_day inner join dest_routes on (rid_day.route_id = dest_routes.route_id and rid_day.time_route = dest_routes.time_route)));
+  create temp table dest_order as
+    (select dest.route_id, dest.sorder2 from dest where dest.station_id = d_station);
+  create temp table comb_table as
+    (select arri.route_id as arid, dest.route_id as drid, arri.station_id as asid, dest.route_id as dsid, arri.sorder1 as aorder, dest.sorder2 as dorder from arri cross join dest);
+  delete from comb_table where arid = drid;
+  delete from comb_table where (asid = a_station or dsid = d_station or asid = d_station or dsid = a_station);
+  create temp table tablea as
+    (select arid, drid, asid,dsid, dorder from (comb_table inner join arri_order on (comb_table.aorder > arri_order.sorder1 and comb_table.arid = arri_order.route_id)));
+  create temp table tableb as
+    (select arid, drid,asid,dsid from (tablea inner join dest_order on (tablea.dorder < dest_order.sorder2 and tablea.drid = dest_order.route_id)));
+  create temp table tablec as
+    (select distinct arid, drid, asid, dsid from tableb);
   return query
-    select ar_id, de_id, a_sta from arr_des_table where a_sta = d_sta;
+    select arid, drid, asid from tablec where asid = dsid;
+
   end;
   $$language plpgsql;
+
+--select * from combine_search('Monday','1','1782');
 
 --This is to show trains with available seats
 create or replace function available_seats() returns table(train_id varchar(5)) as
   $$
   BEGIN
   return query
-    select train_id from seats where open_status = true;
+    select seats.train_id from seats where open_status = true;
   end;
   $$language plpgsql;
+
+--select * from available_seats();
 
 --get seq of stations for searches
 --helper for 1.2.4.3~1.2.4.8
@@ -83,6 +133,7 @@ create or replace function get_seq(routeid varchar(10),arri_id varchar(10), dest
     max1 varchar(10);
     max2 varchar(10);
   begin
+    drop table if exists temp_table, temp_table2, t1, t2;
     create temp table temp_table as (select station_id, station_num from routes_and_station_status where route_id = routeid);
     create temp table temp_table2 as  (select station_id, station_num from temp_table where (station_num between (select station_num from temp_table where station_id = arri_id) and (select station_num from temp_table where station_id = dest_id)));
     create temp table t1 as (select * from temp_table2);
@@ -93,13 +144,15 @@ create or replace function get_seq(routeid varchar(10),arri_id varchar(10), dest
     select max(station_num) into max2 from t2;
     if max1 > max2 then
       return query
-        select t1.station_id, t2.station_id from (t1 join t2 on t1.station_num = t2.station_num + 1);
+        select t2.station_id, t1.station_id from (t1 join t2 on t1.station_num = t2.station_num + 1);
     else
       return query
-        select t1.station_id, t2.station_id from (t1 join t2 on t1.station_num = t2.station_num - 1);
+        select t2.station_id, t2.station_id from (t1 join t2 on t1.station_num = t2.station_num - 1);
     end if;
   end;
   $$language plpgsql;
+
+--select * from get_seq('22','1','8');
 
 --1.2.4.1this is to create the table with stops ascend
 --search mode 1 for single 0 for combined
@@ -120,13 +173,25 @@ create or replace function pass_most() returns table(route_id varchar(5), total_
   end;
   $$language plpgsql;
 
---this is to calculate the lowest price
-create or replace function lowest_price() returns table(route_id varchar(5)) as
+--1.2.4.3this is to calculate the lowest price
+create or replace function lowest_distance(route varchar(5), start_st varchar(10), end_st varchar(10)) returns table(route1 varchar(5), start_st1 varchar(10), end_st1 varchar(10)) as
   $$
+  declare
+    mem1 varchar(10);
+    mem2 varchar(10);
+    dist int;
   begin
+    create temp table t1 as (select * from routes_and_station_status where route_id = route);
+    select station_num into mem1 from t1 where station_id = start_st;
+    select station_num into mem2 from t1 where station_id = end_st;
+    delete from t1 where station_num < mem1;
+    delete from t1 where station_num > mem2;
+    create temp table t2 as (select * from rail_distances where rail_distances.station_prev = t1.station_id);
+    select sum(t2.station_distances) into dist from t2;
 
   end;
   $$language plpgsql;
+
 
 --1.2.5This is to add reservation
 create or replace procedure add_resv(new_passanger_id int, route varchar(10), new_day varchar(10), start_sta1 varchar(10), end_sta1 varchar(10)) as
@@ -177,10 +242,12 @@ create or replace function all_pass(want_station varchar(5), want_day varchar(10
   end;
   $$language plpgsql;
 
+
 --this is for 1.3.2
 create or replace function pass_multi() returns table(multi_route varchar(5)) as
   $$
   begin
+    drop table if exists t1, t2;
     create temp table t1 as (select distinct route_id, rail_id from routes_and_station_status left join rail_stations
   on routes_and_station_status.station_id = rail_stations.station_id);
     create temp table t2 as (select route_id, count(route_id) from t1 group by route_id);
@@ -190,6 +257,8 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
   end;
   $$language plpgsql;
 
+--select * from pass_multi();
+
 --this is for 1.3.3
 
 
@@ -197,6 +266,7 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
 create or replace function all_trian_pass_through() returns table(null_station varchar(10)) as
   $$
   begin
+    drop table if exists t1, t2, t3;
     create temp table t1 as (select route_id from train_schedule group by route_id);
     create temp table t2 as (select * from routes_and_station_status);
     delete from t2 where route_id not in (select route_id from t1);
@@ -207,6 +277,8 @@ create or replace function all_trian_pass_through() returns table(null_station v
       select station_id from t3;
   end;
   $$language plpgsql;
+
+--select * from all_trian_pass_through();
 
 --this is for 1.3.5
 create or replace function never_pass(want_staton varchar(5)) returns table(np_train varchar(5)) as
@@ -219,6 +291,8 @@ create or replace function never_pass(want_staton varchar(5)) returns table(np_t
   end;
   $$language plpgsql;
 
+--select * from never_pass('9');
+
 --this is for 1.3.6
 create or replace function pass_rate(percentage float) returns table(p_route varchar(10)) as
   $$
@@ -228,6 +302,8 @@ create or replace function pass_rate(percentage float) returns table(p_route var
   end;
   $$language plpgsql;
 
+--select * from pass_rate(20.00);
+
 --this is 1.3.7
 create or replace function display_route(want_route varchar(5)) returns table(day_get varchar(10), time_get varchar(10), train_get varchar(10)) as
   $$
@@ -236,6 +312,8 @@ create or replace function display_route(want_route varchar(5)) returns table(da
       select day_of_week, time_route, train_id from train_schedule where route_id = want_route;
   end;
   $$language plpgsql;
+
+--select * from display_route('Monday');
 --this is 1.3.8
 
 --some triggers
