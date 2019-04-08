@@ -111,11 +111,16 @@ create or replace function combine_search(want_days varchar(10), a_station varch
 --select * from combine_search('Monday','1','1782');
 
 --This is to show trains with available seats
-create or replace function available_seats() returns table(train_id varchar(5)) as
+create or replace function available_seats(route varchar(10)) returns table(train_id varchar(5)) as
   $$
   BEGIN
+    drop table if exists t1;
+    create temp table t1 as
+      (select distinct train_id from train_schedule where route_id = route);
+    create temp table t2 as
+      (select * from seats where train_id in (select train_id from t1));
   return query
-    select seats.train_id from seats where open_status = true;
+    select t2.train_id from t2 where open_status = true;
   end;
   $$language plpgsql;
 
