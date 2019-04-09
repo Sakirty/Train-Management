@@ -324,6 +324,82 @@ create or replace function pass_most(a_station varchar(10), d_station varchar(10
 
 --select * from pass_most('1','9','Monday')
 --1.2.4.3this is to calculate the lowest price
+create or replace function low_prince(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(rid varchar(10), dist integer, price integer) as
+  $$
+  begin
+  drop table if exists dt, rid_days, arri, dest,r1,r2,r3,r4;
+  create temp table dt as
+      (select train_schedule.route_id, train_schedule.train_id from train_schedule where day_of_week = want_days);
+    create table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id and arri.sorder1 < dest.sorder2));
+    create temp table r2(rid varchar(10), dists integer);
+    while (select count(r1.route_id) from r1) <> 0 loop
+      drop table if exists tt1, j1;
+      create temp table tt1 as
+        (select * from get_seq((select min(r1.route_id) from r1),a_station, d_station));
+      create temp table j1 as
+        (select * from tt1 as t join rail_distances as d on (t.targst = d.station_prev and t.targst = d.station_next));
+      insert into r2(rid, dists) VALUES ((select min(r1.route_id) from r1),(select sum(j1.station_distances) from j1));
+      delete from r1 where r1.route_id = (select min(r1.route_id) from r1);
+    end loop;
+    create temp table r3 as
+      (select r2.rid as rid, r2.dists as dists, dt.train_id from r2 join dt on r2.rid = dt.route_id);
+    create temp table r4 as
+      (select r3.rid, r3.dists, r3.dists*price_mile as price from (r3 join trains on r3.train_id = trains.train_id));
+    return query
+      select * from r4;
+    end;
+  $$language plpgsql;
+
+--select * from low_prince('1','9','Monday');
+
+--1.2.4.4
+create or replace function low_prince(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(rid varchar(10), dist integer, price integer) as
+  $$
+  begin
+  drop table if exists dt, rid_days, arri, dest,r1,r2,r3,r4;
+  create temp table dt as
+      (select train_schedule.route_id, train_schedule.train_id from train_schedule where day_of_week = want_days);
+    create table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id and arri.sorder1 < dest.sorder2));
+    create temp table r2(rid varchar(10), dists integer);
+    while (select count(r1.route_id) from r1) <> 0 loop
+      drop table if exists tt1, j1;
+      create temp table tt1 as
+        (select * from get_seq((select min(r1.route_id) from r1),a_station, d_station));
+      create temp table j1 as
+        (select * from tt1 as t join rail_distances as d on (t.targst = d.station_prev and t.targst = d.station_next));
+      insert into r2(rid, dists) VALUES ((select max(r1.route_id) from r1),(select sum(j1.station_distances) from j1));
+      delete from r1 where r1.route_id = (select max(r1.route_id) from r1);
+    end loop;
+    create temp table r3 as
+      (select r2.rid as rid, r2.dists as dists, dt.train_id from r2 join dt on r2.rid = dt.route_id);
+    create temp table r4 as
+      (select r3.rid, r3.dists, r3.dists*price_mile as price from (r3 join trains on r3.train_id = trains.train_id));
+    return query
+      select * from r4;
+    end;
+  $$language plpgsql;
+--1.2.4.5
+
+--1.2.4.6
+
+
+--1.2.4.7, 1.2.4.8
 create or replace function lowest_distance(route varchar(5), start_st varchar(10), end_st varchar(10)) returns table(route1 varchar(5), start_st1 varchar(10), end_st1 varchar(10)) as
   $$
   declare
@@ -387,11 +463,11 @@ create trigger do_update
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
   $$
   begin
-
+  drop table if exists temp_schedule, temp_stations;
   create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
   create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
   return query
-    select train_id from temp_schedule where route_id = temp_stations.route_id group by train_id;
+    select train_id from temp_schedule where temp_schedule.route_id = temp_stations.route_id group by train_id;
   end;
   $$language plpgsql;
 
