@@ -160,34 +160,169 @@ create or replace function get_seq(routeid varchar(10),arri_id varchar(10), dest
 --select * from get_seq('22','1','8');
 
 --1.2.4.7 and 1.2.4.8
-create or replace function single_trip_dest(arri varchar(10), dest varchar(10), want_days varchar(10)) returns table(routeid varchar(10), dist int) as
+create or replace function single_trip_dest_min(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(routeid varchar(10), dist int) as
   $$
   declare
-    
+    di integer;
   begin
+    drop table if exists dt, rid_days, arri, dest, r1, r2;
+    create temp table dt as
+      (select train_schedule.route_id from train_schedule where day_of_week = want_days);
+    create temp table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id and arri.sorder1 < dest.sorder2));
+    create temp table r2(route_id varchar(10), dist integer);
 
+    while (select count(r1.route_id) from r1) <> 0 loop
+      drop table if exists tt1, j1;
+      create temp table tt1 as
+        (select * from get_seq((select min(r1.route_id) from r1), a_station, d_station));
+      create temp table j1 as
+        (select * from tt1 as t join rail_distances as d on (t.curst = d.station_prev and t.targst = d.station_next));
+      insert into r2(route_id, dist) values ((select min(r1.route_id) from r1), (select sum(station_distances) from j1));
+      delete from r1 where r1.route_id = (select min(r1.route_id) from r1);
+    end loop;
 
+    return query
+      select * from r2;
   end;
   $$language plpgsql;
+
+create or replace function single_trip_dest_max(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(routeid varchar(10), dist int) as
+  $$
+  declare
+    di integer;
+  begin
+    drop table if exists dt, rid_days, arri, dest, r1, r2;
+    create temp table dt as
+      (select train_schedule.route_id from train_schedule where day_of_week = want_days);
+    create temp table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id and arri.sorder1 < dest.sorder2));
+    create temp table r2(route_id varchar(10), dist integer);
+
+    while (select count(r1.route_id) from r1) <> 0 loop
+      drop table if exists tt1, j1;
+      create temp table tt1 as
+        (select * from get_seq((select max(r1.route_id) from r1), a_station, d_station));
+      create temp table j1 as
+        (select * from tt1 as t join rail_distances as d on (t.curst = d.station_prev and t.targst = d.station_next));
+      insert into r2(route_id, dist) values ((select max(r1.route_id) from r1), (select sum(station_distances) from j1));
+      delete from r1 where r1.route_id = (select min(r1.route_id) from r1);
+    end loop;
+
+    return query
+      select * from r2;
+  end;
+  $$language plpgsql;
+
+
+--select * from single_trip_dest('1','8','Monday');
 --1.2.4.1this is to create the table with stops ascend
 --search mode 1 for single 0 for combined
-create or replace function few_stops() returns table(route_id varchar(5), stop_num int) as
-  $$
-  BEGIN
-  return query
-    select route_id, stop_num from routes group by route_id order by stop_num asc;
-  end;
-  $$language plpgsql;
-
---1.2.4.2this is to order the table run through most stations dec
-create or replace function pass_most() returns table(route_id varchar(5), total_num int) as
+create or replace function stops_amount(rid varchar(10), a_station varchar(10), d_station varchar(10)) returns integer as
   $$
   begin
-    return query
-      select route_id, total_num from routes order by total_num desc;
+    drop table if exists tmp1, tmp2;
+    create temp table tmp1 as
+      (select station_id, station_num from routes_and_station_status where route_id = rid and station_status = true);
+    create temp table tmp2 as
+      (select tmp1.station_id, tmp1.station_num from tmp1 where (tmp1.station_num between (select station_num from tmp1 where tmp1.station_id = a_station) and (select station_num from tmp1 where tmp1.station_id = d_station)));
+    return
+      (select count(*) from tmp2);
   end;
   $$language plpgsql;
 
+--select * from stops_amount('22','1','9');
+
+create or replace function stops_min(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(rid varchar(10), stop_num integer) as
+  $$
+  begin
+    drop table if exists dt, rid_days, r1,r2,arri,dest;
+    create temp table dt as
+      (select train_schedule.route_id from train_schedule where day_of_week = want_days);
+    create table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id));
+
+    create temp table r2 (rids varchar(10), numstop integer);
+    while (select count(r1.route_id) from r1)<>0 loop
+      insert into r2(rids, numstop) values ((select min(r1.route_id) from r1), (stops_amount((select min(r1.route_id) from r1), a_station, d_station)));
+      delete from r1 where r1.route_id = (select min(r1.route_id) from r1);
+    end loop;
+
+    return query
+      select * from r2;
+  end;
+  $$language plpgsql;
+
+--select * from stops_min('1','9','Monday');
+
+
+--1.2.4.2this is to order the table run through most stations dec
+create or replace function sta_amount(rid varchar(10), a_station varchar(10), d_station varchar(10)) returns integer as
+  $$
+  declare
+    inoo integer;
+  begin
+    drop table if exists tmp1, tmp2;
+    create temp table tmp1 as
+      (select station_id, station_num from routes_and_station_status where route_id = rid);
+    create temp table tmp2 as
+      (select tmp1.station_id, tmp1.station_num from tmp1 where (tmp1.station_num between (select station_num from tmp1 where tmp1.station_id = a_station) and (select station_num from tmp1 where tmp1.station_id = d_station)));
+    inoo := (select count(*) from tmp2);
+    return inoo;
+  end;
+  $$language plpgsql;
+
+--select * from sta_amount('22','1','9');
+
+create or replace function pass_most(a_station varchar(10), d_station varchar(10), want_days varchar(10)) returns table(route_id varchar(5), total_num int) as
+  $$
+  begin
+    drop table if exists dt, rid_days, r1,r2,arri,dest;
+    create temp table dt as
+      (select train_schedule.route_id from train_schedule where day_of_week = want_days);
+    create table rid_days as
+      (select r.route_id, r.station_id, r.station_num, r.station_status from routes_and_station_status as r inner join dt on r.route_id = dt.route_id);
+    --delete from rid_days where station_status = false;
+    create temp table arri as
+      (select rid_days.route_id, rid_days.station_num as sorder1 from rid_days where station_id = a_station);
+    create temp table dest as
+      (select rid_days.route_id, rid_days.station_num as sorder2 from rid_days where station_id = d_station);
+    create temp table r1 as
+      (select arri.route_id from (arri inner join dest on arri.route_id = dest.route_id));
+
+    create temp table r2 (rids varchar(10), numsta integer);
+    while (select count(r1.route_id) from r1)<>0 loop
+      insert into r2(rids, numsta) values ((select max(r1.route_id) from r1), (sta_amount((select min(r1.route_id) from r1), a_station, d_station)));
+      delete from r1 where r1.route_id = (select max(r1.route_id) from r1);
+    end loop;
+
+    return query
+      select * from r2;
+  end;
+  $$language plpgsql;
+
+--select * from pass_most('1','9','Monday')
 --1.2.4.3this is to calculate the lowest price
 create or replace function lowest_distance(route varchar(5), start_st varchar(10), end_st varchar(10)) returns table(route1 varchar(5), start_st1 varchar(10), end_st1 varchar(10)) as
   $$
@@ -278,7 +413,38 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
 --select * from pass_multi();
 
 --this is for 1.3.3
+create or replace function same_stations(routeid varchar(10)) returns table(rid varchar(10)) as
+  $$
+  begin
+    drop table tr1, tr2, tr3, tr4;
+  create temp table tr1 as
+      (select * from routes_and_station_status where route_id <> routeid);
+  --select * from tr1;
+  create temp table tr2 as
+      (select route_id, count(station_id) from tr1 group by route_id);
+  --select * from tr2;
+  delete from tr2 where tr2.count <> (select count(station_id) from routes_and_station_status where route_id = routeid);
+   delete from tr1 where tr1.route_id not in (select tr2.route_id from tr2);
 
+  create temp table tr3 as
+      (select * from routes_and_station_status where route_id = routeid);
+  --select * from tr3;
+
+  delete from tr1 where station_id not in (select station_id from tr3);
+
+  create temp table tr4 as
+      (select route_id, count(station_id) from tr1 group by route_id);
+  --select * from tr4;
+
+  delete from tr4 where count <> (select count(station_id) from routes_and_station_status where route_id = routeid);
+  delete from tr1 where route_id not in (select route_id from tr4);
+
+  return query
+    select route_id from tr4;
+  end;
+  $$language plpgsql;
+
+select * from same_stations('85');
 
 --this is for 1.3.4
 create or replace function all_trian_pass_through() returns table(null_station varchar(10)) as
