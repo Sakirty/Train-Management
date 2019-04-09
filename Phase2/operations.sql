@@ -444,7 +444,7 @@ create or replace function same_stations(routeid varchar(10)) returns table(rid 
   end;
   $$language plpgsql;
 
-select * from same_stations('85');
+--select * from same_stations('85');
 
 --this is for 1.3.4
 create or replace function all_trian_pass_through() returns table(null_station varchar(10)) as
