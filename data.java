@@ -29,9 +29,87 @@ public class data{
         System.out.println("\t12.Display a route");
         System.out.println("\t13.Find seats availability");
         System.out.println("\t14.Quit");
-
+        
         //System.out.println("\t");
+        else if(choice.equals("1")){
+            addPassanger();
+        }
+        else if(choice.equals("2")){
+            editPassanger();
+        }
+        else if(choice.equals("3")){
+            viewPassanger();
+        }
+        else if(choice.equals("4")){
+            singleSearch();  
+        } 
+        else if(choice.equals("5")){
+            combineSearch();
+        }
+        else if(choice.equals("6")){
+            allPass();
+        }
+        else if(choice.equals("7")){
+            allMultiRoute();
+        }
+        else if(choice.equals("8")){
+            similarRoute();
+        }
+        else if(choice.equals("9")){
+            allStation();
+        }
+        else if(choice.equals("10")){
+            doesNotStop();
+        }
+        else if(choice.equals("11")){
+            stopPercent();
+        }
+        else if(choice.equals("12")){
+            displayRoute();
+        }
+        else if(choice.equals("13")){
+            seatsAvil();
+        }
+        else if(choice.equals("14")){
+            System.out.println("EXITING");
+            System.exit(0);
+        }
+        else{
+            System.out.println("INVALID CHOICE");
+            data();
+        }
         choice = inScan.nextLine();
+        
+    }
+    public void addPassanger(){
+
+    }
+    public void editPassanger(){
+
+    }
+    public void viewPassanger(){
+
+    }
+    public void singleSearch(){
+
+    }
+    public void combineSearch(){
+
+    }
+    public void allPass(){
+
+    }
+    public void doesNotStop(){
+
+    }
+    public void stopPercent(){
+
+    }
+    public void displayRoute(){
+
+    }
+    public void seatsAvil(){
+        
     }
     public static void main(String args[]) throws SQLException{
         String username, password;
