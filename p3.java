@@ -69,19 +69,80 @@ public class p3{
         }
     }
     public static void addPassanger(){
-        System.out.println("First Name?");
-        String fname = inScan.nextLine();
-        System.out.println("Last Name?");
-        String lname = inScan.nextLine();
-        System.out.println("street?");
-        String st = inScan.nextLine();
-        System.out.println("town?");
-        String tw = inScan.nextLine();
-        System.out.println("zip?");
-        String zip = inScan.nextLine();
+        try{
+            System.out.println("First Name?");
+            String fname = inScan.nextLine();
+            System.out.println("Last Name?");
+            String lname = inScan.nextLine();
+            System.out.println("street?");
+            String st = inScan.nextLine();
+            System.out.println("town?");
+            String tw = inScan.nextLine();
+            System.out.println("zip?");
+            String zip = inScan.nextLine();
+            query = "select max(passanger_id) from passangers";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            int maxid = 0;
+            while(res1.next()){
+                maxid = res1.getInt("max");
+                //System.out.println(maxid);
+            }
+            maxid+=1;
+            //System.out.println(maxid);
+            query = "insert into passangers(passanger_id, f_name, l_name, street, town, zip) values ("+maxid+",'"+fname+"','"+lname+"','"+st+"','"+tw+"','"+zip+"')";
+            ResultSet res2 = statement.executeQuery(query);
+            System.out.println("ADDED!");
+            res2.close();
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
+
+        }
     }
     public static void editPassanger()throws SQLException{
+        try{
+            System.out.println("ID?");
+            String id = inScan.nextLine();
+            query = "select * from passangers where passanger_id = " + id;
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String fname1, lname1, street1, town1, zip1;
+            while(res1.next()){
+                fname1 = res1.getString("f_name");
+                lname1 = res1.getString("l_name");
+                street1 = res1.getString("street");
+                town1 = res1.getString("town");
+                zip1 = res1.getString("zip");
+                System.out.println("you selected:"+fname1+" "+lname1+" "+street1+" "+town1+" "+zip1);
+            }
+            System.out.println("Update? y/n");
+            String ud = inScan.nextLine();
+            if(ud.equals("y")){
+                System.out.println("First Name?");
+                String fname = inScan.nextLine();
+                System.out.println("Last Name?");
+                String lname = inScan.nextLine();
+                System.out.println("street?");
+                String st = inScan.nextLine();
+                System.out.println("town?");
+                String tw = inScan.nextLine();
+                System.out.println("zip?");
+                String zip = inScan.nextLine();
+                //System.out.println("get1");
+                query = "update passangers set f_name = '"+fname+"', l_name = '"+lname+"', street = '"+st +"', town = '"+tw+"', zip = '"+zip+"' where passanger_id = "+ id;
+                //System.out.println("get2");
+                //System.out.println(query);
+                int res2 = statement.executeUpdate(query);
+                System.out.println("UPDATED!");
+                //res2.close();
+                //System.out.println(fname+"  "+lname+"  "+st+"  "+tw+"  "+zip);
+            }    
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void viewPassanger() throws SQLException{
         try{
@@ -100,6 +161,7 @@ public class p3{
                 System.out.println(fname+" "+lname+" "+street+" "+town+" "+zip);
             }
             res1.close();
+            statement.close();
         }catch(SQLException e){
 
         }

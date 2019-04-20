@@ -13,7 +13,7 @@ $$
     VALUES(pass_id, first_name, last_name, street1, town1, zip1);
   end;
 $$language plpgsql;
-
+--update passanger set f_name = 'q', l_name = 'w', street = 'e', town = 'r', zip = 't' where passanger_id = 995507;
 create or replace function get_passanger(id int) returns table(pid int, fname varchar(10),lname varchar(10), str varchar(10), town varchar(10), zip varchar(10))
 as
   $$
@@ -646,6 +646,27 @@ create or replace function display_route(want_route varchar(5)) returns table(da
 
 --select * from display_route('Monday');
 --this is 1.3.8
+create or replace function find_avil(want_day varchar(10), want_time varchar(10), routeid varchar(10)) returns table(train varchar(10), total integer, open integer, status boolean) as
+  $$
+  begin
+    drop table if exists t1,t2;
+    --create temp table t1 as (select * from train_schedule where route_id = '22');
+    --delete from t1 where t1.day_of_week <> 'Sunday';
+    --delete from t1 where t1.time_route <> '04:46';
+    --select * from t1;
+    create temp table t1 as (select * from train_schedule where route_id = routeid);
+    delete from t1 where t1.day_of_week <> want_day;
+    delete from t1 where t1.time_route <> want_time;
+    create temp table t2 as (select * from seats where seats.train_id in(select train_id from t1));
+    --select * from t2;
+    delete from t2 where t2.open_status = false;
+    return query
+      select train_id, seats_total, seats_taken, open_status from t2;
+
+  end;
+  $$language plpgsql;
+
+--select * from find_avil('Sunday','04:46','22');
 
 --some triggers
 create or replace function incr_seat() returns trigger as
@@ -723,4 +744,5 @@ create or replace procedure delete_databse() as
     drop database if exists postgres;
   end;
   $$language plpgsql;
+
 
