@@ -89,10 +89,9 @@ public class p3{
                 //System.out.println(maxid);
             }
             maxid+=1;
-            //System.out.println(maxid);
+            System.out.println("The new ID is:"+maxid);
             query = "insert into passangers(passanger_id, f_name, l_name, street, town, zip) values ("+maxid+",'"+fname+"','"+lname+"','"+st+"','"+tw+"','"+zip+"')";
             ResultSet res2 = statement.executeQuery(query);
-            System.out.println("ADDED!");
             res2.close();
             res1.close();
             statement.close();
