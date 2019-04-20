@@ -193,13 +193,29 @@ public class p3{
 
         }
     }
-    public static void doesNotStop()throws SQLException{
-
-    }
     public static void similarRoute()throws SQLException{
+        try{
+            System.out.println("What route?");
+            String sta = inScan.nextLine();
+            query = "select * from same_stations('" + sta + "')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String sr;
+            System.out.println("Routes similar with "+sta);
+            while(res1.next()){
+                sr = res1.getString("rid");
+                System.out.println(sr);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void allStation()throws SQLException{
+
+    }
+    public static void doesNotStop()throws SQLException{
 
     }
     public static void stopPercent()throws SQLException{

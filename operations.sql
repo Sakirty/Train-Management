@@ -556,7 +556,7 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
 create or replace function same_stations(routeid varchar(10)) returns table(rid varchar(10)) as
   $$
   begin
-    drop table tr1, tr2, tr3, tr4;
+    drop table if exists tr1, tr2, tr3, tr4;
   create temp table tr1 as
       (select * from routes_and_station_status where route_id <> routeid);
   --select * from tr1;
