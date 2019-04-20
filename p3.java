@@ -112,17 +112,14 @@ public class p3{
             String start = inScan.nextLine();
             System.out.println("End at?");
             String end = inScan.nextLine();
-            query = "select * from passangers where passanger_id = " + id;
+            query = "select * from single_search('" + day+"','"+start+"','"+end+"')";
             statement = connection.createStatement();
             ResultSet res1 = statement.executeQuery(query);
-            String fname, lname, street, town, zip;
+            String routeid;
+            System.out.println("Routes:");
             while(res1.next()){
-                fname = res1.getString("f_name");
-                lname = res1.getString("l_name");
-                street = res1.getString("street");
-                town = res1.getString("town");
-                zip = res1.getString("zip");
-                System.out.println(fname+" "+lname+" "+street+" "+town+" "+zip);
+                routeid = res1.getString("route_id");
+                System.out.println(routeid);
             }
             res1.close();
         }catch(SQLException e){
@@ -212,7 +209,7 @@ public class p3{
             connection = DriverManager.getConnection(url, username, password);
             //System.out.println("connected!");
             //promote_choice();
-            login();
+            //login();
             while(true){
                 data();
             }
