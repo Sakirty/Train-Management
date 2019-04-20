@@ -351,7 +351,31 @@ public class p3{
         }
     }
     public static void seatsAvil()throws SQLException{
-        
+        try{
+            System.out.println("What Day?");
+            String day = inScan.nextLine();
+            System.out.println("What time?");
+            String time = inScan.nextLine();
+            System.out.println("What route?");
+            String route = inScan.nextLine();
+            query = "select * from find_avil('" + day+"','"+time+"','"+route + "')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String train,total,open;
+            boolean stat;
+            System.out.println("Train\tTotal\tOpen\tStatus");
+            while(res1.next()){
+                train = res1.getString("train");
+                total = res1.getString("total");
+                open = res1.getString("open");
+                stat = res1.getBoolean("status");
+                System.out.println(train+"    "+total+"    "+open+"    "+stat);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
+
+        }
     }
     public static void promote_choice(){
         System.out.println("Please Select What you would like to do: ");
