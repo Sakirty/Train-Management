@@ -434,7 +434,7 @@ public class p3{
             connection = DriverManager.getConnection(url, username, password);
             //System.out.println("connected!");
             //promote_choice();
-            //login();
+            login();
             while(true){
                 data();
             }
