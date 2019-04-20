@@ -13,6 +13,7 @@ $$
     VALUES(pass_id, first_name, last_name, street1, town1, zip1);
   end;
 $$language plpgsql;
+
 create or replace function get_passanger(id int) returns table(pid int, fname varchar(10),lname varchar(10), str varchar(10), town varchar(10), zip varchar(10))
 as
   $$
@@ -107,13 +108,13 @@ create or replace function combine_search(want_days varchar(10), a_station varch
   end;
   $$language plpgsql;
 
---select * from combine_search('Monday','1','1782');
+--select * from combine_search('Monday','1','2');
 
 --This is to show trains with available seats
 create or replace function available_seats(route varchar(10)) returns table(train_id varchar(5)) as
   $$
   BEGIN
-    drop table if exists t1;
+    drop table if exists t1,t2;
     create temp table t1 as
       (select distinct train_id from train_schedule where route_id = route);
     create temp table t2 as
@@ -526,12 +527,14 @@ create or replace function all_pass(want_station varchar(5), want_day varchar(10
   begin
   drop table if exists temp_schedule, temp_stations;
   create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
-  create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
+  create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station);
+  --create temp table ts2 as (select * from temp_schedule where temp_schedule.route_id in(select route_id from temp_stations));
   return query
-    select train_id from temp_schedule where temp_schedule.route_id = temp_stations.route_id group by train_id;
+    select train_id from temp_schedule where temp_schedule.route_id in (select route_id from temp_stations) group by train_id;
   end;
   $$language plpgsql;
 
+--select * from all_pass('1','Sunday','04:46');
 
 --this is for 1.3.2
 create or replace function pass_multi() returns table(multi_route varchar(5)) as

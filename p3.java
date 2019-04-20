@@ -113,6 +113,7 @@ public class p3{
             System.out.println("End at?");
             String end = inScan.nextLine();
             query = "select * from single_search('" + day+"','"+start+"','"+end+"')";
+            //System.out.println(query);
             statement = connection.createStatement();
             ResultSet res1 = statement.executeQuery(query);
             String routeid;
@@ -122,15 +123,58 @@ public class p3{
                 System.out.println(routeid);
             }
             res1.close();
+            statement.close();
         }catch(SQLException e){
 
         }
     }
     public static void combineSearch()throws SQLException{
+        try{
+            System.out.println("What Day?");
+            String day = inScan.nextLine();
+            System.out.println("Start at?");
+            String start = inScan.nextLine();
+            System.out.println("End at?");
+            String end = inScan.nextLine();
+            query = "select * from combine_search('" + day+"','"+start+"','"+end+"')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String routeid1,routeid2,stationtrans;
+            System.out.println("Route1\tRoute2");
+            while(res1.next()){
+                routeid1 = res1.getString("route_1");
+                routeid2 = res1.getString("route_2");
+                stationtrans = res1.getString("trans_station");
+                System.out.println(routeid1+"\t"+routeid2);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void allPass()throws SQLException{
+        try{
+            System.out.println("What station?");
+            String sta = inScan.nextLine();
+            System.out.println("What day?");
+            String day = inScan.nextLine();
+            System.out.println("What time(xx:xx)?");
+            String tim = inScan.nextLine();
+            query = "select * from all_pass('" + sta+"','"+day+"','"+tim+"')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String want_train;
+            System.out.println("Trains");
+            while(res1.next()){
+                want_train = res1.getString("want_train");
+                System.out.println(want_train);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void doesNotStop()throws SQLException{
 
@@ -185,6 +229,7 @@ public class p3{
                 //System.out.print(aid+"  "+apw);
             }
             res1.close();
+            statement.close();
             System.out.println("Agent PW:");
             String pw = inScan.nextLine();
             if(pw.equals(apw)){
