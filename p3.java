@@ -213,16 +213,80 @@ public class p3{
         }
     }
     public static void allStation()throws SQLException{
+        try{
+            query = "select * from all_trian_pass_through();";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String mlt;
+            System.out.println("Stations:");
+            while(res1.next()){
+                mlt = res1.getString("null_station");
+                System.out.println(mlt);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void doesNotStop()throws SQLException{
+        try{
+            System.out.println("Which Stop?");
+            String sta = inScan.nextLine();
+            query = "select * from never_pass('" + sta + "')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String np;
+            System.out.println("Routes never pass "+sta);
+            while(res1.next()){
+                np = res1.getString("np_train");
+                System.out.println(np);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void stopPercent()throws SQLException{
+        try{
+            System.out.println("Rate(xx.xx)?");
+            String rate = inScan.nextLine();
+            query = "select * from pass_rate('" + rate + "')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String pr;
+            System.out.println("Routes pass rate higher than "+ rate);
+            while(res1.next()){
+                pr = res1.getString("p_route");
+                System.out.println(pr);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void displayRoute()throws SQLException{
+        try{
+            System.out.println("Route?");
+            String route = inScan.nextLine();
+            query = "select * from display_route('" + route + "')";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String day,time,train;
+            System.out.println("Day\tTime\tTrain");
+            while(res1.next()){
+                day = res1.getString("day_get");
+                time = res1.getString("time_get");
+                train = res1.getString("train_get");
+                System.out.println(day+"  "+time+"  "+train);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
 
+        }
     }
     public static void seatsAvil()throws SQLException{
         
