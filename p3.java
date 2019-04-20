@@ -80,7 +80,7 @@ public class p3{
         System.out.println("zip?");
         String zip = inScan.nextLine();
     }
-    public static void editPassanger(){
+    public static void editPassanger()throws SQLException{
 
     }
     public static void viewPassanger() throws SQLException{
@@ -99,38 +99,61 @@ public class p3{
                 zip = res1.getString("zip");
                 System.out.println(fname+" "+lname+" "+street+" "+town+" "+zip);
             }
+            res1.close();
         }catch(SQLException e){
 
         }
     }
-    public static void singleSearch(){
+    public static void singleSearch()throws SQLException{
+        try{
+            System.out.println("What Day?");
+            String day = inScan.nextLine();
+            System.out.println("Start at?");
+            String start = inScan.nextLine();
+            System.out.println("End at?");
+            String end = inScan.nextLine();
+            query = "select * from passangers where passanger_id = " + id;
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String fname, lname, street, town, zip;
+            while(res1.next()){
+                fname = res1.getString("f_name");
+                lname = res1.getString("l_name");
+                street = res1.getString("street");
+                town = res1.getString("town");
+                zip = res1.getString("zip");
+                System.out.println(fname+" "+lname+" "+street+" "+town+" "+zip);
+            }
+            res1.close();
+        }catch(SQLException e){
+
+        }
+    }
+    public static void combineSearch()throws SQLException{
 
     }
-    public static void combineSearch(){
+    public static void allPass()throws SQLException{
 
     }
-    public static void allPass(){
+    public static void doesNotStop()throws SQLException{
 
     }
-    public static void doesNotStop(){
+    public static void allMultiRoute()throws SQLException{
 
     }
-    public static void allMultiRoute(){
+    public static void similarRoute()throws SQLException{
 
     }
-    public static void similarRoute(){
+    public static void allStation()throws SQLException{
 
     }
-    public static void allStation(){
+    public static void stopPercent()throws SQLException{
 
     }
-    public static void stopPercent(){
+    public static void displayRoute()throws SQLException{
 
     }
-    public static void displayRoute(){
-
-    }
-    public static void seatsAvil(){
+    public static void seatsAvil()throws SQLException{
         
     }
     public static void promote_choice(){
@@ -150,6 +173,33 @@ public class p3{
         System.out.println("\t13.Find seats availability");
         System.out.println("\t14.Quit");
     }
+    public static void login() throws SQLException{
+        try{
+            System.out.println("Agent ID:");
+            String id = inScan.nextLine();
+            query = "select * from agents where agent_id = " + id;
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String aid = ""; 
+            String apw = "";
+            while(res1.next()){
+                aid = res1.getString("agent_id");
+                apw = res1. getString("agent_pw");
+                //System.out.print(aid+"  "+apw);
+            }
+            res1.close();
+            System.out.println("Agent PW:");
+            String pw = inScan.nextLine();
+            if(pw.equals(apw)){
+                
+            }else{
+                System.out.println("WRONG PASSWORD or ID!");
+                System.exit(0);
+            }
+        }catch(SQLException e){
+
+        }
+    }
     public static void main(String args[]) throws
             SQLException, ClassNotFoundException {
     //jdbc:postgresql://localhost:5432/
@@ -162,6 +212,7 @@ public class p3{
             connection = DriverManager.getConnection(url, username, password);
             //System.out.println("connected!");
             //promote_choice();
+            login();
             while(true){
                 data();
             }
