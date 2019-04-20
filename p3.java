@@ -176,10 +176,24 @@ public class p3{
 
         }
     }
-    public static void doesNotStop()throws SQLException{
-
-    }
     public static void allMultiRoute()throws SQLException{
+        try{
+            query = "select * from pass_multi();";
+            statement = connection.createStatement();
+            ResultSet res1 = statement.executeQuery(query);
+            String mlt;
+            //System.out.println("Trains");
+            while(res1.next()){
+                mlt = res1.getString("multi_route");
+                System.out.println(mlt);
+            }
+            res1.close();
+            statement.close();
+        }catch(SQLException e){
+
+        }
+    }
+    public static void doesNotStop()throws SQLException{
 
     }
     public static void similarRoute()throws SQLException{
