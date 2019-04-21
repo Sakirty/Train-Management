@@ -58,9 +58,6 @@ public class p3{
                 seatsAvil();
             }
             else if(choice.equals("14")){
-                reserve();
-            }
-            else if(choice.equals("15")){
                 System.out.println("EXITING");
                 System.exit(0);
             }
@@ -89,6 +86,7 @@ public class p3{
             int maxid = 0;
             while(res1.next()){
                 maxid = res1.getInt("max");
+                //System.out.println(maxid);
             }
             maxid+=1;
             System.out.println("The new ID is:"+maxid);
@@ -393,8 +391,7 @@ public class p3{
         System.out.println("\t11.Find all routes taht stop at leat at x% of the station they visit(given a x)");
         System.out.println("\t12.Display a route");
         System.out.println("\t13.Find seats availability");
-        System.out.println("\t14.Add reservation");
-        System.out.println("\t15.Quit");
+        System.out.println("\t14.Quit");
     }
     public static void login() throws SQLException{
         try{
@@ -420,27 +417,6 @@ public class p3{
                 System.out.println("WRONG PASSWORD or ID!");
                 System.exit(0);
             }
-        }catch(SQLException e){
-
-        }
-    }
-    public static void reserve() throws SQLException{
-        try{
-            System.out.println("Pass ID?");
-            String pid = inScan.nextLine();
-            System.out.println("Route?");
-            String rid = inScan.nextLine();
-            System.out.println("What day?");
-            String day = inScan.nextLine();
-            System.out.println("From?");
-            String from = inScan.nextLine();
-            System.out.println("To?");
-            String to = inScan.nextLine();
-            query = "insert into reservations(passanger_id, route_id, day_of_week, start_sta, end_sta) values ("+pid+",'"+rid+"','"+day+"','"+from+"','"+to+"')";
-            statement = connection.createStatement();
-            ResultSet res1 = statement.executeQuery(query);
-            res1.close();
-            statement.close();
         }catch(SQLException e){
 
         }

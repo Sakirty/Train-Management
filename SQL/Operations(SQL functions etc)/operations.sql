@@ -1,6 +1,6 @@
 --加DROP TEMP TABLE
 --1.1this is for customer add
-drop function if exists insertpass(first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
+drop function if exists InsertPass(first_name varchar, last_name varchar, street1 varchar, town1 varchar, zip1 varchar) cascade;
 
 CREATE or replace function InsertPass(first_name varchar(20), last_name varchar(20), street1 varchar(20), town1 varchar(20), zip1 varchar(10)) returns void
 AS
@@ -13,7 +13,7 @@ $$
     VALUES(pass_id, first_name, last_name, street1, town1, zip1);
   end;
 $$language plpgsql;
-
+--update passanger set f_name = 'q', l_name = 'w', street = 'e', town = 'r', zip = 't' where passanger_id = 995507;
 create or replace function get_passanger(id int) returns table(pid int, fname varchar(10),lname varchar(10), str varchar(10), town varchar(10), zip varchar(10))
 as
   $$
@@ -108,13 +108,13 @@ create or replace function combine_search(want_days varchar(10), a_station varch
   end;
   $$language plpgsql;
 
---select * from combine_search('Monday','1','1782');
+--select * from combine_search('Monday','1','2');
 
 --This is to show trains with available seats
 create or replace function available_seats(route varchar(10)) returns table(train_id varchar(5)) as
   $$
   BEGIN
-    drop table if exists t1;
+    drop table if exists t1,t2;
     create temp table t1 as
       (select distinct train_id from train_schedule where route_id = route);
     create temp table t2 as
@@ -490,36 +490,8 @@ create or replace procedure add_resv(new_passanger_id int, route varchar(10), ne
   end;
   $$language plpgsql;
 
-create or replace function resv_update() returns trigger as
-  $$
-  declare
-    want_day varchar(10);
-    want_route varchar(10);
-    stats_seat boolean;
-    seats_occu int;
-  begin
-    drop table if exists t1;
-    select new_day into want_day from reservations;
-    select route into want_route from reservations;
-    select open_status into stats_seat from seats;
-    select seats_taken into seats_occu from seats;
-    create temp table t1 as (select * from train_schedule where day_of_week = want_day);
-    delete from t1 where route_id <> want_route;
-    if stats_seat = true then
-      update seats set seats_taken = seats_occu + 1 where seats.train_id = t1.train_id;
-      if seats_occu = seats.seats_total - 1 then
-          update seats set open_status = false where seats.train_id = t1.train_id;
-      end if;
-    end if;
-    return new;
-  end;
-  $$language plpgsql;
 
-create trigger do_update
-  after insert
-  on reservations
-  for each row
-  execute procedure resv_update();
+--insert into reservations(passanger_id, route_id, day_of_week, start_sta, end_sta) values (995506,'22','Monday','1','8');
 
 --this is for 1.3.1
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
@@ -527,12 +499,14 @@ create or replace function all_pass(want_station varchar(5), want_day varchar(10
   begin
   drop table if exists temp_schedule, temp_stations;
   create temp table temp_schedule as (select * from train_schedule where day_of_week = want_day and time_route = want_time);
-  create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station and station_status = false);
+  create temp table temp_stations as (select route_id from routes_and_station_status where station_id = want_station);
+  --create temp table ts2 as (select * from temp_schedule where temp_schedule.route_id in(select route_id from temp_stations));
   return query
-    select train_id from temp_schedule where temp_schedule.route_id = temp_stations.route_id group by train_id;
+    select train_id from temp_schedule where temp_schedule.route_id in (select route_id from temp_stations) group by train_id;
   end;
   $$language plpgsql;
 
+--select * from all_pass('1','Sunday','04:46');
 
 --this is for 1.3.2
 create or replace function pass_multi() returns table(multi_route varchar(5)) as
@@ -554,7 +528,7 @@ create or replace function pass_multi() returns table(multi_route varchar(5)) as
 create or replace function same_stations(routeid varchar(10)) returns table(rid varchar(10)) as
   $$
   begin
-    drop table tr1, tr2, tr3, tr4;
+    drop table if exists tr1, tr2, tr3, tr4;
   create temp table tr1 as
       (select * from routes_and_station_status where route_id <> routeid);
   --select * from tr1;
@@ -644,6 +618,27 @@ create or replace function display_route(want_route varchar(5)) returns table(da
 
 --select * from display_route('Monday');
 --this is 1.3.8
+create or replace function find_avil(want_day varchar(10), want_time varchar(10), routeid varchar(10)) returns table(train varchar(10), total integer, open integer, status boolean) as
+  $$
+  begin
+    drop table if exists t1,t2;
+    --create temp table t1 as (select * from train_schedule where route_id = '22');
+    --delete from t1 where t1.day_of_week <> 'Sunday';
+    --delete from t1 where t1.time_route <> '04:46';
+    --select * from t1;
+    create temp table t1 as (select * from train_schedule where route_id = routeid);
+    delete from t1 where t1.day_of_week <> want_day;
+    delete from t1 where t1.time_route <> want_time;
+    create temp table t2 as (select * from seats where seats.train_id in(select train_id from t1));
+    --select * from t2;
+    delete from t2 where t2.open_status = false;
+    return query
+      select train_id, seats_total, seats_taken, open_status from t2;
+
+  end;
+  $$language plpgsql;
+
+--select * from find_avil('Sunday','04:46','22');
 
 --some triggers
 create or replace function incr_seat() returns trigger as
@@ -721,4 +716,5 @@ create or replace procedure delete_databse() as
     drop database if exists postgres;
   end;
   $$language plpgsql;
+
 

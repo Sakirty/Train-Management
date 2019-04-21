@@ -490,8 +490,36 @@ create or replace procedure add_resv(new_passanger_id int, route varchar(10), ne
   end;
   $$language plpgsql;
 
+create or replace function resv_update() returns trigger as
+  $$
+  declare
+    want_day varchar(10);
+    want_route varchar(10);
+    stats_seat boolean;
+    seats_occu int;
+  begin
+    drop table if exists t1;
+    select new_day into want_day from reservations;
+    select route into want_route from reservations;
+    select open_status into stats_seat from seats;
+    select seats_taken into seats_occu from seats;
+    create temp table t1 as (select * from train_schedule where day_of_week = want_day);
+    delete from t1 where route_id <> want_route;
+    if stats_seat = true then
+      update seats set seats_taken = seats_occu + 1 where seats.train_id = t1.train_id;
+      if seats_occu = seats.seats_total - 1 then
+          update seats set open_status = false where seats.train_id = t1.train_id;
+      end if;
+    end if;
+    return new;
+  end;
+  $$language plpgsql;
 
---insert into reservations(passanger_id, route_id, day_of_week, start_sta, end_sta) values (995506,'22','Monday','1','8');
+create trigger do_update
+  after insert
+  on reservations
+  for each row
+  execute procedure resv_update();
 
 --this is for 1.3.1
 create or replace function all_pass(want_station varchar(5), want_day varchar(10), want_time varchar(10)) returns table(want_train varchar(5)) as
