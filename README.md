@@ -1,2 +1,2 @@
-# CS1555_project
-This is the repo for Tiruo Yan, Tianyi Li, CS1555. With Costa and Xiaozhong
+# Train Management System
+Train Management System, built with PostgreSQL and JDBC.
